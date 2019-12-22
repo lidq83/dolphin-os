@@ -1,32 +1,41 @@
-# src Makefile
-include ../Makefile.common
+# general Makefile
 
-PATH_HARDWARE=hardware
-PATH_MAIN=main
-CFLAGSlib+=-Iinclude
+include Makefile.common
 
-all: src
+LDFLAGS=$(COMMONFLAGS) -fno-exceptions -ffunction-sections -fdata-sections -L$(LIBDIR) -nostartfiles -Wl,--gc-sections,-Tlinker.ld
+LDLIBS+=-lm
+LDLIBS+=-lstm32
 
-src: mkdir objs app.a
+all: mkdir stm32libs src
+	$(CC) -o $(PATH_TARGET)/$(PROGRAM).elf $(LDFLAGS) \
+		-Wl,--whole-archive \
+		src/$(PATH_TARGET)/app.a \
+		-Wl,--no-whole-archive \
+		$(LDLIBS)
+	$(OBJCOPY) -O ihex $(PATH_TARGET)/$(PROGRAM).elf $(PATH_TARGET)/$(PROGRAM).hex
+	$(OBJCOPY) -O binary $(PATH_TARGET)/$(PROGRAM).elf $(PATH_TARGET)/$(PROGRAM).bin
+	arm-none-eabi-readelf -a $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_elf
+	arm-none-eabi-size -d -B -t $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_size
+	arm-none-eabi-objdump -S $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_code
+	arm-none-eabi-nm -t d -S --size-sort -s $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_symbol
+
+.PHONY: mkdir stm32libs src clean
+
+stm32libs:
+	cd stm32libs && make
 
 mkdir:
-	mkdir -p release
+	mkdir -p $(PATH_TARGET)
 
-objs:
-	$(CC) $(CFLAGSlib) -o $(PATH_TARGET)/main.o -c $(PATH_MAIN)/main.c
-	$(CC) $(CFLAGSlib) -o $(PATH_TARGET)/startup.o -c $(PATH_MAIN)/startup_stm32f10x_md.s
-	$(CC) $(CFLAGSlib) -o $(PATH_TARGET)/led.o -c $(PATH_HARDWARE)/led.c
-	$(CC) $(CFLAGSlib) -o $(PATH_TARGET)/timer.o -c $(PATH_HARDWARE)/timer.c
-	$(CC) $(CFLAGSlib) -o $(PATH_TARGET)/timer4.o -c $(PATH_HARDWARE)/timer4.c
+src:
+	$(MAKE) -C src $@
 	
+install:
+	jlink -commanderscript loadbin_cmd.jlink
 
-app.a:
-	$(AR) cr $(PATH_TARGET)/app.a $(PATH_TARGET)/startup.o \
-		$(PATH_TARGET)/main.o \
-		$(PATH_TARGET)/led.o \
-		$(PATH_TARGET)/timer.o \
-		$(PATH_TARGET)/timer4.o
-	
 clean:
+	$(MAKE) -C src $@
 	rm -f $(PATH_TARGET)/*
-	
+
+cleanstm32libs:
+	cd stm32libs && make clean

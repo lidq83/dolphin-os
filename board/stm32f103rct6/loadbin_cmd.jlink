@@ -1,0 +1,8 @@
+device STM32F103RC
+si 1
+speed 4000
+erase
+loadbin ./release/main.bin 0x8000000
+r
+g
+exit
