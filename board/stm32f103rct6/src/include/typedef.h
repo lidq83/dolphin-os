@@ -14,6 +14,4 @@
 #include <misc.h>
 #include <stdint.h>
 
-typedef uint64_t u64;
-
 #endif

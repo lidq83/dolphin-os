@@ -30,14 +30,19 @@ uint8_t map_proi[256] =
 	/* END */
 };
 
+//进程就绪队列位图，bit位中为1表示已就绪，0表示未就绪
 uint32_t pcb_ready_map = 0;
 
+//内核中pcb，静态申请32个pcb
 static pcb_s pcbs[PROCESS_CNT] = { 0 };
 
+//初始化进程栈
 static void *stack_init(void *p_entry, void *p_arg, uint32_t *stack);
 
+//获取优先级最高的进程索引
 static uint32_t pcb_get_highest_prio(void);
 
+//初始化进程栈
 void *stack_init(void *p_entry, void *p_arg, uint32_t *stack)
 {
 	uint32_t *stk = stack;
@@ -65,28 +70,32 @@ void *stack_init(void *p_entry, void *p_arg, uint32_t *stack)
 	return stk;
 }
 
+//创建一个进程
 pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t *stack)
 {
+	//初始化栈
 	pcbs[prio].p_stack = stack_init(p_entry, p_arg, stack);
+	//优先级
 	pcbs[prio].prio = prio;
+	//休眠tick数
 	pcbs[prio].sleep_tick = 0;
-	pcbs[prio].status = 0;
-
+	//返回pcb地址
 	return &pcbs[prio];
 }
 
+//将进程加入就绪队列
 void pcb_ready(pcb_s *pcb)
 {
 	pcb_ready_map |= 1 << pcb->prio;
-	pcb->status = 1;
 }
 
+//将进程由就绪队列挂起
 void pcb_block(pcb_s *pcb)
 {
 	pcb_ready_map &= ~(1 << pcb->prio);
-	pcb->status = 2;
 }
 
+//获取优先级最高的进程索引
 uint32_t pcb_get_highest_prio(void)
 {
 	if (pcb_ready_map & 0xff)
@@ -107,6 +116,7 @@ uint32_t pcb_get_highest_prio(void)
 	return map_proi[(pcb_ready_map & 0xff000000) >> 24] + 24;
 }
 
+//获取优先级最高的进程
 pcb_s* pcb_get_highest_pcb(void)
 {
 	return &pcbs[pcb_get_highest_prio()];

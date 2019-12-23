@@ -65,13 +65,14 @@ SRC			+=	./src/main/system_stm32f10x.c
 
 #------------------------------------------------------------------------#
 # Main function
-SRC			+=	./src/main/main.c
+SRC			+=	./src/main/main.c \
+				./src/main/task.c
 
 #------------------------------------------------------------------------#
 # Modules
 SRC			+=	./src/modules/led.c \
 				./src/modules/sysclk.c \
-				./src/modules/timer4.c
+				./src/modules/tim4.c
 
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \

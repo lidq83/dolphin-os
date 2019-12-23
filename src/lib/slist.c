@@ -7,6 +7,7 @@
 
 #include "slist.h"
 
+//第一个空闲位置
 static uint8_t map_first_one[256] = {
 	/* 00 */ 0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
 	/* 10 */ 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
@@ -27,6 +28,7 @@ static uint8_t map_first_one[256] = {
 	/* END */
 };
 
+//初始化链表
 int slist_init(slist_s *list)
 {
 	if (list == NULL)
@@ -35,31 +37,42 @@ int slist_init(slist_s *list)
 	}
 
 	memset(list, 0, sizeof(slist_s));
+	//初始化位图，所有位置均可用
 	list->use_map = 0xffffffff;
 	return 0;
 }
 
+//追加节点到链表
 int slist_append(slist_s *list, void *key, void *value)
 {
 	if (list == NULL)
 	{
 		return -1;
 	}
+
 	if (list->size >= SLIST_SIZE)
 	{
 		return -1;
 	}
 
+	//取得第一个空闲位置的索引号
 	uint32_t ind = slist_first_empty(list);
+	//申请节点
 	slist_alloc(list, ind);
+	//设置新节点的值
 	slist_node_s *node_new = &list->node_map[ind];
+	//索引号
 	node_new->ind = ind;
+	//关键字
 	node_new->key = key;
+	//值
 	node_new->value = value;
+	//下一个节点
 	node_new->next = NULL;
-
+	//链表节点个数加一
 	list->size++;
 
+	//只有一个节点时，头尾指针都指向这个节点
 	if (list->foot == NULL)
 	{
 		list->head = node_new;
@@ -67,12 +80,14 @@ int slist_append(slist_s *list, void *key, void *value)
 		return 0;
 	}
 
+	//更新尾节点指针
 	list->foot->next = node_new;
 	list->foot = node_new;
 
 	return 0;
 }
 
+//从链表中移除节点
 int slist_remove(slist_s *list, slist_node_s **node, void **value)
 {
 	if (list == NULL)
@@ -84,17 +99,34 @@ int slist_remove(slist_s *list, slist_node_s **node, void **value)
 		return -1;
 	}
 
+	//输出节点值
 	if (value != NULL)
 	{
 		*value = (*node)->value;
 	}
 
+	//释放此节点
 	slist_free(list, (*node)->ind);
+
+	//更新尾节点
+	if ((*node)->next == NULL)
+	{
+		list->foot = *node;
+	}
+
+	//移除节点
 	*node = (*node)->next;
+
+	//当链表为空时更新尾节点
+	if (list->head == NULL)
+	{
+		list->foot = NULL;
+	}
 
 	return 0;
 }
 
+//找到第一个空闲位置的索引号
 uint32_t slist_first_empty(slist_s *list)
 {
 	if (list->use_map & 0xff)
@@ -115,24 +147,30 @@ uint32_t slist_first_empty(slist_s *list)
 	return map_first_one[(list->use_map & 0xff000000) >> 24] + 24;
 }
 
+//根据索引号分配节点
 int slist_alloc(slist_s *list, uint32_t ind)
 {
 	if (list == NULL)
 	{
 		return -1;
 	}
+
+	//将使用位图中指定的索引号置为0,表示此位置占用
 	list->use_map &= ~(1 << ind);
 
-    return 0;
+	return 0;
 }
 
+//根据索引号释放节点
 int slist_free(slist_s *list, uint32_t ind)
 {
 	if (list == NULL)
 	{
 		return -1;
 	}
+
+	//将使用位图中指定的索引号置为1,表示此位置空闲
 	list->use_map |= 1 << ind;
 
-    return 0;
+	return 0;
 }

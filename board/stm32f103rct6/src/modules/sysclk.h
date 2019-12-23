@@ -3,6 +3,7 @@
 
 #include <typedef.h>
 
+//初始化系统时钟
 void sysclk_init();
 
 #endif

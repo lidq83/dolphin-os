@@ -1,4 +1,4 @@
-#include <timer4.h>
+#include <tim4.h>
 
 static uint32_t tick = 0;
 
@@ -17,18 +17,20 @@ void timer4_init()
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	TIM_DeInit(TIM4);
 
-	TIM_TimeBaseStructure.TIM_Period = 1000 - 1; //自动重装载寄存器周期的值(计数值)
-	//累计 TIM_Period个频率后产生一个更新或者中断
-	TIM_TimeBaseStructure.TIM_Prescaler = (72 - 1); //时钟预分频数   例如：时钟频率=72MHZ/(时钟预分频+1)
-	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //采样分频
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //向上计数模式
+	//自动重装载寄存器周期的值(计数值)
+	TIM_TimeBaseStructure.TIM_Period = 1000 - 1;
+	//时钟预分频数   例如：时钟频率=72MHZ/(时钟预分频+1)
+	TIM_TimeBaseStructure.TIM_Prescaler = (72 - 1);
+	//采样分频
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	//向上计数模式
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
-	TIM_ClearFlag(TIM4, TIM_FLAG_Update); //清除溢出中断标志
-	//TIM_PrescalerConfig(TIM4,0x8C9F,TIM_PSCReloadMode_Immediate); //时钟分频系数36000，所以定时器时钟为2K
-	//TIM_ARRPreloadConfig(TIM4, DISABLE);       //禁止ARR预装载缓冲器
+	//清除溢出中断标志
+	TIM_ClearFlag(TIM4, TIM_FLAG_Update);
 	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
-
-	TIM_Cmd(TIM4, ENABLE); //开启时钟
+	//开启时钟
+	TIM_Cmd(TIM4, ENABLE);
 
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
@@ -47,4 +49,3 @@ void TIM4_IRQHandler()
 	}
 	TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);
 }
-

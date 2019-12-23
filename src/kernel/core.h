@@ -7,6 +7,7 @@
 #ifndef __SRC_KERNEL_CORE_H
 #define __SRC_KERNEL_CORE_H
 
+//启动内核程序
 void kernel_startup(void);
 
 #endif

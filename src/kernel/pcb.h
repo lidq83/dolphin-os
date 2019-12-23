@@ -9,8 +9,10 @@
 
 #include <stdint.h>
 
+//支持最多32个进程
 #define PROCESS_CNT (32)
 
+//进程控制块Process Control Block
 typedef struct pcb_s
 {
     //进程栈顶地址
@@ -19,16 +21,18 @@ typedef struct pcb_s
     uint8_t prio;
     //任务休眠ticks
     uint32_t sleep_tick;
-    //任务状态
-    uint8_t status;
 } pcb_s;
 
+//创建一个进程
 pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t *stack);
 
+//将进程加入就绪队列
 void pcb_ready(pcb_s *pcb);
 
+//将进程由就绪队列挂起
 void pcb_block(pcb_s *pcb);
 
+//获取就绪队列中优先级最高的pcb
 pcb_s* pcb_get_highest_pcb(void);
 
 #endif
