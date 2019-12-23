@@ -1,41 +1,110 @@
-# general Makefile
+#------------------------------------------------------------------------#
+# Output files
+ELF_FILE	=	dolphin-os.elf
+BIN_FILE	=	dolphin-os.bin
+HEX_FILE	=	dolphin-os.hex
+INFO_FILE	=	dolphin-os.info
+CODE_FILE	=	dolphin-os.code
 
-include Makefile.common
+#------------------------------------------------------------------------#
+# Cross Compiler
+CC			=	arm-none-eabi-gcc
+OBJCOPY		=	arm-none-eabi-objcopy
+OBJDUMP		=	arm-none-eabi-objdump
+READELF		=	arm-none-eabi-readelf
 
-LDFLAGS=$(COMMONFLAGS) -fno-exceptions -ffunction-sections -fdata-sections -L$(LIBDIR) -nostartfiles -Wl,--gc-sections,-Tlinker.ld
-LDLIBS+=-lm
-LDLIBS+=-lstm32
+#------------------------------------------------------------------------#
+# Flags
+CFLAGS		+=	-g
+CFLAGS		+=	-mthumb
+#CFLAGS		+=	-mlittle-endian 
+#CFLAGS		+=	-nostdlib 
+#CFLAGS		+=	-ffreestanding
+CFLAGS		+=	-Wno-incompatible-pointer-types
+CFLAGS		+=	-Wno-unused-but-set-variable
+CFLAGS		+=	-Wno-unused-variable
+CFLAGS		+=	-mcpu=cortex-m3
+CFLAGS		+=	-I./
+CFLAGS		+=	-D"assert_param(expr)=((void)0)"
+CFLAGS		+=	-D STM32F10X_MD -D VECT_TAB_FLASH
 
-all: mkdir stm32libs src
-	$(CC) -o $(PATH_TARGET)/$(PROGRAM).elf $(LDFLAGS) \
-		-Wl,--whole-archive \
-		src/$(PATH_TARGET)/app.a \
-		-Wl,--no-whole-archive \
-		$(LDLIBS)
-	$(OBJCOPY) -O ihex $(PATH_TARGET)/$(PROGRAM).elf $(PATH_TARGET)/$(PROGRAM).hex
-	$(OBJCOPY) -O binary $(PATH_TARGET)/$(PROGRAM).elf $(PATH_TARGET)/$(PROGRAM).bin
-	arm-none-eabi-readelf -a $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_elf
-	arm-none-eabi-size -d -B -t $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_size
-	arm-none-eabi-objdump -S $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_code
-	arm-none-eabi-nm -t d -S --size-sort -s $(PATH_TARGET)/$(PROGRAM).elf > $(PATH_TARGET)/$(PROGRAM).info_symbol
+CFLAGS		+=	-fno-exceptions
+CFLAGS		+=	-ffunction-sections
+CFLAGS		+=	-fdata-sections
+CFLAGS		+=	-nostartfiles
+CFLAGS		+=	-Wl,--gc-sections,-Tstm32_flash.ld
 
-.PHONY: mkdir stm32libs src clean
+#------------------------------------------------------------------------#
+# Link script
+#CFLAGS		+=	-Wl,-T,stm32_flash.ld
 
-stm32libs:
-	cd stm32libs && make
+#------------------------------------------------------------------------#
+# Libraries
+STM32_LIBS	=	libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/STM32F10x_StdPeriph_Driver
+CFLAGS		+=	-I$(STM32_LIBS)/inc
+CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Include
+CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32F10x/Include
 
-mkdir:
-	mkdir -p $(PATH_TARGET)
+KERNEL_PATH	=	../../src
+CFLAGS		+=	-I./src/include
+CFLAGS		+=	-I./src/main
+CFLAGS		+=	-I./src/modules
+CFLAGS		+=	-I$(KERNEL_PATH)/kernel
+CFLAGS		+=	-I$(KERNEL_PATH)/lib
+CFLAGS		+=	-I$(KERNEL_PATH)/mm
 
-src:
-	$(MAKE) -C src $@
-	
-install:
-	jlink -commanderscript loadbin_cmd.jlink
+#------------------------------------------------------------------------#
+# StdPeriph
+SRC			=	$(STM32_LIBS)/src/misc.c \
+				$(STM32_LIBS)/src/stm32f10x_rcc.c \
+				$(STM32_LIBS)/src/stm32f10x_gpio.c \
+				$(STM32_LIBS)/src/stm32f10x_tim.c \
+				$(STM32_LIBS)/src/stm32f10x_usart.c \
+				$(STM32_LIBS)/src/stm32f10x_exti.c \
+				$(STM32_LIBS)/src/stm32f10x_i2c.c
+
+#------------------------------------------------------------------------#
+# Setup system clock
+SRC			+=	./src/main/system_stm32f10x.c
+
+#------------------------------------------------------------------------#
+# Main function
+SRC			+=	./src/main/main.c
+
+#------------------------------------------------------------------------#
+# Modules
+SRC			+=	./src/modules/led.c \
+				./src/modules/sysclk.c \
+				./src/modules/timer4.c
+
+SRC			+=	$(KERNEL_PATH)/kernel/core.c \
+				$(KERNEL_PATH)/kernel/pcb.c \
+				$(KERNEL_PATH)/kernel/sche.c \
+				$(KERNEL_PATH)/lib/slist.c
+
+STARTUP		=	./src/main/startup_stm32f10x_md.s
+
+STARTUP_OBJ	=	startup_stm32f10x_md.o
+
+all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O binary $^ $@
+
+$(HEX_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O ihex $^ $@
+
+$(INFO_FILE):$(ELF_FILE)
+	$(READELF) -a $^ > $@
+
+$(CODE_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $^ > $@
+
+$(STARTUP_OBJ):$(STARTUP)
+	$(CC) $(CFLAGS) $^ -c $(STARTUP)
+
+$(ELF_FILE):$(SRC) $(STARTUP_OBJ)
+	$(CC) $(CFLAGS)	$^ -o $@
 
 clean:
-	$(MAKE) -C src $@
-	rm -f $(PATH_TARGET)/*
-
-cleanstm32libs:
-	cd stm32libs && make clean
+	@rm -rvf *.o *.bin *.code *.elf *.hex *.info

@@ -1,6 +1,10 @@
-cs_nao.db
 *.dSYM
 *.o
+*.bin
+*.elf
+*.hex
+*.info
+*.code
 *.gch
 *.pyc
 *~
@@ -67,10 +71,5 @@ cmake-build-*/
 
 posix-configs/SITL/init/test/*_generated
 
-/airframes.md
-/airframes.xml
-/parameters.md
-/parameters.xml
-/modules
-
 *.gcov
+
