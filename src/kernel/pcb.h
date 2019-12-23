@@ -23,4 +23,12 @@ typedef struct pcb_s
     uint8_t status;
 } pcb_s;
 
+pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t *stack);
+
+void pcb_ready(pcb_s *pcb);
+
+void pcb_block(pcb_s *pcb);
+
+pcb_s* pcb_get_highest_pcb(void);
+
 #endif

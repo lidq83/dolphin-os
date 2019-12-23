@@ -8,9 +8,20 @@
 #define __SRC_KERNEL_SCHE_H
 
 #include <typedef.h>
+#include <pcb.h>
 
-void set_pend_sv_proi(void);
+void sche_tick(void);
 
-void trigger_pend_sv(void);
+void sleep_ticks(uint32_t tick);
+
+void sche_pend_sv_proi(void);
+
+void sche_trigger_pend_sv(void);
+
+pcb_s *sche_curr_pcb(void);
+
+void sche_int_enter(void);
+
+void sche_int_leave(void);
 
 #endif

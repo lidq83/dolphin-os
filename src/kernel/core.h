@@ -7,6 +7,6 @@
 #ifndef __SRC_KERNEL_CORE_H
 #define __SRC_KERNEL_CORE_H
 
-void start_kernel(void);
+void kernel_startup(void);
 
 #endif

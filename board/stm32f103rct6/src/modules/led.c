@@ -19,37 +19,36 @@ void led_on(int led)
 {
 	switch (led)
 	{
-		case 0:
-			GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-			break;
-		case 1:
-			GPIO_ResetBits(GPIOC, GPIO_Pin_14);
-			break;
-		case 2:
-			GPIO_ResetBits(GPIOC, GPIO_Pin_15);
-			break;
-		default:
-			GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-			break;
+	case 0:
+		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+		break;
+	case 1:
+		GPIO_ResetBits(GPIOC, GPIO_Pin_14);
+		break;
+	case 2:
+		GPIO_ResetBits(GPIOC, GPIO_Pin_15);
+		break;
+	default:
+		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+		break;
 	}
-
 }
 
 void led_off(int led)
 {
 	switch (led)
 	{
-		case 0:
-			GPIO_SetBits(GPIOC, GPIO_Pin_13);
-			break;
-		case 1:
-			GPIO_SetBits(GPIOC, GPIO_Pin_14);
-			break;
-		case 2:
-			GPIO_SetBits(GPIOC, GPIO_Pin_15);
-			break;
-		default:
-			GPIO_SetBits(GPIOC, GPIO_Pin_13);
-			break;
+	case 0:
+		GPIO_SetBits(GPIOC, GPIO_Pin_13);
+		break;
+	case 1:
+		GPIO_SetBits(GPIOC, GPIO_Pin_14);
+		break;
+	case 2:
+		GPIO_SetBits(GPIOC, GPIO_Pin_15);
+		break;
+	default:
+		GPIO_SetBits(GPIOC, GPIO_Pin_13);
+		break;
 	}
 }

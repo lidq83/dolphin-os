@@ -6,6 +6,7 @@
  */
 
 #include <pcb.h>
+#include <sche.h>
 
 //记录优先级是0~255，第一个1的位置，也就是优先级位置
 uint8_t map_proi[256] =
@@ -34,6 +35,8 @@ uint32_t pcb_ready_map = 0;
 static pcb_s pcbs[PROCESS_CNT] = { 0 };
 
 static void *stack_init(void *p_entry, void *p_arg, uint32_t *stack);
+
+static uint32_t pcb_get_highest_prio(void);
 
 void *stack_init(void *p_entry, void *p_arg, uint32_t *stack)
 {
@@ -102,4 +105,9 @@ uint32_t pcb_get_highest_prio(void)
 	}
 
 	return map_proi[(pcb_ready_map & 0xff000000) >> 24] + 24;
+}
+
+pcb_s* pcb_get_highest_pcb(void)
+{
+	return &pcbs[pcb_get_highest_prio()];
 }
