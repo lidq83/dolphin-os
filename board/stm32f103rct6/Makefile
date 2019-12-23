@@ -23,16 +23,17 @@ CFLAGS		+=	-Wno-unused-variable
 CFLAGS		+=	-mcpu=cortex-m3
 CFLAGS		+=	-I./
 CFLAGS		+=	-D"assert_param(expr)=((void)0)"
-CFLAGS		+=	-D STM32F10X_MD -D VECT_TAB_FLASH
+CFLAGS		+=	-D STM32F10X_MD
+# -D VECT_TAB_FLASH
 
-CFLAGS		+=	-fno-exceptions
-CFLAGS		+=	-ffunction-sections
-CFLAGS		+=	-fdata-sections
+#CFLAGS		+=	-fno-exceptions
+#CFLAGS		+=	-ffunction-sections
+#CFLAGS		+=	-fdata-sections
 CFLAGS		+=	-nostartfiles
 
 #------------------------------------------------------------------------#
 # Link script
-CFLAGS		+=	-Wl,--gc-sections,-Tstm32_flash.ld
+CFLAGS		+=	-Wl,-Tstm32_flash.ld
 
 #------------------------------------------------------------------------#
 # Libraries
@@ -103,6 +104,9 @@ $(STARTUP_OBJ):$(STARTUP)
 
 $(ELF_FILE):$(SRC) $(STARTUP_OBJ)
 	$(CC) $(CFLAGS)	$^ -o $@
+
+install:
+	jlink -commanderscript loadbin_cmd.jlink
 
 clean:
 	@rm -rvf *.o *.bin *.code *.elf *.hex *.info

@@ -15,7 +15,7 @@ void sysclk_init()
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
 
 	//等待1毫秒
-	while (72000)
+	for (int i = 0; i < 72000; i++)
 	{
 	}
 

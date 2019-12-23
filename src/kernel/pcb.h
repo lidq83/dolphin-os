@@ -16,12 +16,14 @@
 typedef struct pcb_s
 {
     //进程栈顶地址
-    void *p_stack;
+    uint32_t *p_stack;
     //优先级由高0到低32
     uint8_t prio;
     //任务休眠ticks
     uint32_t sleep_tick;
 } pcb_s;
+
+uint32_t *stack_init(void *p_entry, void *p_arg, uint32_t *stack);
 
 //创建一个进程
 pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t *stack);
@@ -31,6 +33,9 @@ void pcb_ready(pcb_s *pcb);
 
 //将进程由就绪队列挂起
 void pcb_block(pcb_s *pcb);
+
+//获取优先级最高的进程索引
+uint32_t pcb_get_highest_prio(void);
 
 //获取就绪队列中优先级最高的pcb
 pcb_s* pcb_get_highest_pcb(void);

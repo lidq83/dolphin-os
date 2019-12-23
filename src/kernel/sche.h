@@ -10,6 +10,9 @@
 #include <typedef.h>
 #include <pcb.h>
 
+//
+void sche_init(void);
+
 //系统心跳
 void sche_tick(void);
 
@@ -23,7 +26,7 @@ void sleep_ticks(uint32_t tick);
 void sche_pend_sv_proi(void);
 
 //触发SV中断
-void sche_trigger_pend_sv(void);
+void sche_trigger(void);
 
 //获取当前运行的pcb
 pcb_s *sche_curr_pcb(void);

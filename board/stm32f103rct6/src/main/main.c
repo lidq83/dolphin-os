@@ -6,6 +6,7 @@
  */
 
 #include <typedef.h>
+#include <led.h>
 #include <core.h>
 #include <sysclk.h>
 #include <task.h>
@@ -18,9 +19,11 @@ int main(int argc, char *argv[])
 
 	rcc_config();
 
-	kernel_startup();
+	led_init();
 
 	task_create_examples();
+
+	kernel_startup();
 
 	sysclk_init();
 

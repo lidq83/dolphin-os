@@ -14,4 +14,6 @@
 
 void task_create_examples(void);
 
+void task_1(void);
+
 #endif
