@@ -17,9 +17,6 @@ READELF		=	arm-none-eabi-readelf
 # Flags
 CFLAGS		+=	-g
 CFLAGS		+=	-mthumb
-#CFLAGS		+=	-mlittle-endian 
-#CFLAGS		+=	-nostdlib 
-#CFLAGS		+=	-ffreestanding
 CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
 CFLAGS		+=	-Wno-unused-variable
@@ -32,11 +29,10 @@ CFLAGS		+=	-fno-exceptions
 CFLAGS		+=	-ffunction-sections
 CFLAGS		+=	-fdata-sections
 CFLAGS		+=	-nostartfiles
-CFLAGS		+=	-Wl,--gc-sections,-Tstm32_flash.ld
 
 #------------------------------------------------------------------------#
 # Link script
-#CFLAGS		+=	-Wl,-T,stm32_flash.ld
+CFLAGS		+=	-Wl,--gc-sections,-Tstm32_flash.ld
 
 #------------------------------------------------------------------------#
 # Libraries
@@ -80,6 +76,7 @@ SRC			+=	./src/modules/led.c \
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
+				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/lib/slist.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s

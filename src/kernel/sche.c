@@ -70,38 +70,49 @@ _out:
 	sche_int_leave();
 }
 
+void sche_switch(void)
+{
+	p_next = pcb_get_highest_pcb();
+	if (p_current == p_next)
+	{
+		return;
+	}
+
+	sche_trigger_pend_sv();
+}
+
 void sleep_ticks(uint32_t tick)
 {
-    if (tick == 0)
-    {
-        return;
-    }
-    sche_int_enter();
+	if (tick == 0)
+	{
+		return;
+	}
+	sche_int_enter();
 
-    pcb_s *p_curr = sche_curr_pcb();
-    p_curr->sleep_tick = tick;
-    pcb_block(p_curr);
-    slist_append(&sleep_list, p_curr, p_curr);
+	pcb_s *p_curr = sche_curr_pcb();
+	p_curr->sleep_tick = tick;
+	pcb_block(p_curr);
+	slist_append(&sleep_list, p_curr, p_curr);
 
-    sche_trigger_pend_sv();
+	sche_trigger_pend_sv();
 
-    sche_int_leave();
+	sche_int_leave();
 }
 
 void wakeup(void)
 {
-    slist_node_s **p = &sleep_list.head;
-    while (*p != NULL)
-    {
-        pcb_s *pcb = (pcb_s *)(*p)->value;
-        pcb->sleep_tick--;
-        if (pcb->sleep_tick == 0)
-        {
-            slist_remove(&sleep_list, p, NULL);
-            pcb_ready(pcb);
-        }
-        p = &(*p)->next;
-    }
+	slist_node_s **p = &sleep_list.head;
+	while (*p != NULL)
+	{
+		pcb_s *pcb = (pcb_s *)(*p)->value;
+		pcb->sleep_tick--;
+		if (pcb->sleep_tick == 0)
+		{
+			slist_remove(&sleep_list, p, NULL);
+			pcb_ready(pcb);
+		}
+		p = &(*p)->next;
+	}
 }
 
 void PendSV_Handler(void)

@@ -1,7 +1,7 @@
 /*
  * sche.h
  *
- *  Created on: December 20, 2019
+ *  Created on: December 23, 2019
  *      Author: lidq
  */
 #ifndef __SRC_KERNEL_SCHE_H
@@ -11,6 +11,8 @@
 #include <pcb.h>
 
 void sche_tick(void);
+
+void sche_switch(void);
 
 void sleep_ticks(uint32_t tick);
 
