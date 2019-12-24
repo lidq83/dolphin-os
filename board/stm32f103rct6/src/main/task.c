@@ -13,8 +13,8 @@ static void task_led(void *arg);
 static void task_0(void);
 static void task_1(void);
 
-static uint32_t stack_led[2][STACK_SIZE];
-static uint32_t stack_task[2][STACK_SIZE];
+static uint8_t stack_led[2][STACK_SIZE];
+static uint8_t stack_task[2][STACK_SIZE];
 
 static sem_t sem_rw = {0};
 

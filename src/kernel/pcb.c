@@ -36,7 +36,7 @@ uint32_t pcb_ready_map = 0;
 pcb_s pcbs[PROCESS_CNT] = { 0 };
 
 //初始化进程栈
-uint32_t *stack_init(void *p_entry, void *p_arg, uint32_t *stack)
+void *stack_init(void *p_entry, void *p_arg, void *stack)
 {
 	uint32_t *stk = stack;
 
