@@ -31,8 +31,6 @@ typedef struct slist_s
 {
 	//链表头节点
 	slist_node_s *head;
-	//链表尾节点
-	slist_node_s *foot;
 	//链表节点使用位图（0：使用，1：空闲）
 	uint32_t use_map;
 	//链表中节点个数

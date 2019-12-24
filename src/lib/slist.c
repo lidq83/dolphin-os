@@ -57,6 +57,10 @@ int slist_append(slist_s *list, void *key, void *value)
 
 	//取得第一个空闲位置的索引号
 	uint32_t ind = slist_first_empty(list);
+	if (ind >= SLIST_SIZE)
+	{
+		return -1;
+	}
 	//申请节点
 	slist_alloc(list, ind);
 	//设置新节点的值
@@ -72,17 +76,12 @@ int slist_append(slist_s *list, void *key, void *value)
 	//链表节点个数加一
 	list->size++;
 
-	//只有一个节点时，头尾指针都指向这个节点
-	if (list->foot == NULL)
+	slist_node_s **p = &list->head;
+	while (*p != NULL)
 	{
-		list->head = node_new;
-		list->foot = node_new;
-		return 0;
+		p = &(*p)->next;
 	}
-
-	//更新尾节点指针
-	list->foot->next = node_new;
-	list->foot = node_new;
+	*p = node_new;
 
 	return 0;
 }
@@ -99,6 +98,11 @@ int slist_remove(slist_s *list, slist_node_s **node, void **value)
 		return -1;
 	}
 
+	if (list->size == 0)
+	{
+		return -1;
+	}
+
 	//输出节点值
 	if (value != NULL)
 	{
@@ -107,21 +111,9 @@ int slist_remove(slist_s *list, slist_node_s **node, void **value)
 
 	//释放此节点
 	slist_free(list, (*node)->ind);
-
-	//更新尾节点
-	if ((*node)->next == NULL)
-	{
-		list->foot = *node;
-	}
-
+	list->size--;
 	//移除节点
 	*node = (*node)->next;
-
-	//当链表为空时更新尾节点
-	if (list->head == NULL)
-	{
-		list->foot = NULL;
-	}
 
 	return 0;
 }
@@ -144,7 +136,12 @@ uint32_t slist_first_empty(slist_s *list)
 		return map_first_one[(list->use_map & 0xff0000) >> 16] + 16;
 	}
 
-	return map_first_one[(list->use_map & 0xff000000) >> 24] + 24;
+	if ((list->use_map & 0xff000000))
+	{
+		return map_first_one[(list->use_map & 0xff000000) >> 24] + 24;
+	}
+
+	return 0xffffffff;
 }
 
 //根据索引号分配节点

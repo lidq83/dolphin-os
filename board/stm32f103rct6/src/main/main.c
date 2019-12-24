@@ -21,12 +21,12 @@ int main(int argc, char *argv[])
 
 	led_init();
 
-	task_create_examples();
-
 	kernel_startup();
 
-	sysclk_init();
+	task_create_examples();
 
+	sysclk_init();
+	
 	while (1)
 	{
 	}

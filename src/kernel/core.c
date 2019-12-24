@@ -11,7 +11,11 @@
 #include <led.h>
 
 //空闲进程栈
-static uint8_t idle_stack[128] = { 0 };
+static uint8_t idle_stack[128] = {0};
+
+extern pcb_s *pcb_next;
+
+extern void sche_switch_first(void);
 
 //空闲进程
 static void process_idle(void);
@@ -24,14 +28,6 @@ void process_idle(void)
 	while (1)
 	{
 		idle_ind++;
-		for (int i = 0; i < 1000000; ++i)
-		{
-		}
-		led_on(0);
-		for (int i = 0; i < 1000000; ++i)
-		{
-		}
-		led_off(0);
 	}
 }
 
@@ -41,7 +37,6 @@ void kernel_startup(void)
 	sche_init();
 
 	//创建空闲进程，优先级为最低
-	pcb_create(31, &process_idle, NULL, &idle_stack[128]);
-	//设置SV中断优先级
-	sche_pend_sv_proi();
+	pcb_s *pcb_idle = pcb_create(31, &process_idle, NULL, &idle_stack[128]);
+	pcb_next = pcb_idle;
 }

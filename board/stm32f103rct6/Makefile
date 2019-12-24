@@ -79,6 +79,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/kernel/switch.S \
 				$(KERNEL_PATH)/lib/slist.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s
