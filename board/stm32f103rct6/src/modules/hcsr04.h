@@ -10,6 +10,6 @@
 
 #include <typedef.h>
 
-void timer4_init();
+void hcsr04_init(void);
 
 #endif /* SRC_INCLUDE_TIMER4_H_ */

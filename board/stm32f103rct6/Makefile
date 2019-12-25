@@ -24,11 +24,6 @@ CFLAGS		+=	-mcpu=cortex-m3
 CFLAGS		+=	-I./
 CFLAGS		+=	-D"assert_param(expr)=((void)0)"
 CFLAGS		+=	-D STM32F10X_MD
-# -D VECT_TAB_FLASH
-
-#CFLAGS		+=	-fno-exceptions
-#CFLAGS		+=	-ffunction-sections
-#CFLAGS		+=	-fdata-sections
 CFLAGS		+=	-nostartfiles
 
 #------------------------------------------------------------------------#
@@ -45,6 +40,7 @@ CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
+CFLAGS		+=	-I./src/hardware
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
@@ -71,9 +67,14 @@ SRC			+=	./src/main/main.c \
 
 #------------------------------------------------------------------------#
 # Modules
-SRC			+=	./src/modules/led.c \
-				./src/modules/sysclk.c \
-				./src/modules/tim4.c
+SRC			+=	./src/hardware/led.c \
+				./src/hardware/sysclk.c \
+				./src/hardware/tim2.c \
+				./src/hardware/tim3.c \
+				./src/hardware/uart1.c \
+				./src/modules/protocol.c \
+				./src/modules/hcsr04.c \
+				./src/modules/pwmout.c
 
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \

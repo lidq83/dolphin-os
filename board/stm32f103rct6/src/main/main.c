@@ -7,7 +7,13 @@
 
 #include <typedef.h>
 #include <led.h>
+#include <tim2.h>
+#include <tim3.h>
+#include <uart1.h>
+#include <hcsr04.h>
 #include <core.h>
+#include <protocol.h>
+#include <pwmout.h>
 #include <sysclk.h>
 #include <task.h>
 
@@ -23,7 +29,17 @@ int main(int argc, char *argv[])
 
 	kernel_startup();
 
-	task_create_examples();
+	task_led_blink();
+
+	uart1_init();
+
+	tim2_pwm_init();
+
+	tim3_in_init();
+
+	hcsr04_init();
+
+	pwmout_init();
 
 	sysclk_init();
 	

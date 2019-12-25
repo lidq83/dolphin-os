@@ -14,4 +14,12 @@
 #include <misc.h>
 #include <stdint.h>
 
+#define PRIO_HCSR04 (16)
+#define PRIO_PWMOUT (20)
+
+#define PRIO_TASK_0 (22)
+#define PRIO_TASK_1 (24)
+#define PRIO_TASK_2 (26)
+#define PRIO_TASK_3 (28)
+
 #endif

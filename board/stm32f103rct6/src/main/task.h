@@ -12,6 +12,6 @@
 #include <sem.h>
 #include <led.h>
 
-void task_create_examples(void);
+void task_led_blink(void);
 
 #endif

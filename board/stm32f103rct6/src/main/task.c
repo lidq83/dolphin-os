@@ -6,6 +6,7 @@
  */
 
 #include <task.h>
+#include <led.h>
 
 #define STACK_SIZE (256)
 
@@ -18,13 +19,8 @@ static uint8_t stack_task[2][STACK_SIZE];
 
 static sem_t sem_rw = {0};
 
-typedef struct led_s
-{
-	uint8_t led_num;
-	uint8_t led_val;
-} led_s;
-
-static led_s led[2] = {{0, 0x05}, {1, 0x15}};
+// static led_s led[2] = {{0, 0x05}, {1, 0x15}};
+led_s led[2] = {{0, 0x0}, {1, 0x0}};
 
 void task_led(void *arg)
 {
@@ -49,7 +45,7 @@ void task_0(void)
 	while (1)
 	{
 		sem_post(&sem_rw);
-		sleep_ticks(200);
+		sleep_ticks(150);
 	}
 }
 
@@ -70,13 +66,15 @@ void task_1(void)
 	}
 }
 
-void task_create_examples(void)
+void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
 
-	pcb_create(24, &task_led, (void *)&led[0], &stack_led[0][STACK_SIZE]);
-	pcb_create(26, &task_led, (void *)&led[1], &stack_led[1][STACK_SIZE]);
+	//led闪烁
+	pcb_create(PRIO_TASK_0, &task_led, (void *)&led[0], &stack_led[0][STACK_SIZE]);
+	pcb_create(PRIO_TASK_1, &task_led, (void *)&led[1], &stack_led[1][STACK_SIZE]);
 
-	pcb_create(20, &task_0, NULL, &stack_task[0][STACK_SIZE]);
-	pcb_create(18, &task_1, NULL, &stack_task[1][STACK_SIZE]);
+	//信号量示例
+	pcb_create(PRIO_TASK_2, &task_0, NULL, &stack_task[0][STACK_SIZE]);
+	pcb_create(PRIO_TASK_3, &task_1, NULL, &stack_task[1][STACK_SIZE]);
 }
