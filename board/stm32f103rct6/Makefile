@@ -44,7 +44,6 @@ CFLAGS		+=	-I./src/hardware
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
-CFLAGS		+=	-I$(KERNEL_PATH)/mm
 
 #------------------------------------------------------------------------#
 # StdPeriph
@@ -81,6 +80,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/kernel/switch.S \
+				$(KERNEL_PATH)/kernel/mm.c \
 				$(KERNEL_PATH)/lib/slist.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s

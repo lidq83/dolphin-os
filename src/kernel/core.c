@@ -9,9 +9,7 @@
 #include <pcb.h>
 #include <sche.h>
 #include <led.h>
-
-//空闲进程栈
-static uint8_t idle_stack[128] = {0};
+#include <mm.h>
 
 extern pcb_s *pcb_next;
 
@@ -34,8 +32,11 @@ void process_idle(void)
 //启动内核程序
 void kernel_startup(void)
 {
+	mm_init();
+
 	sche_init();
 
+	uint8_t *idle_stack = (uint8_t *) malloc(128);
 	//创建空闲进程，优先级为最低
 	pcb_s *pcb_idle = pcb_create(31, &process_idle, NULL, &idle_stack[128]);
 	pcb_next = pcb_idle;

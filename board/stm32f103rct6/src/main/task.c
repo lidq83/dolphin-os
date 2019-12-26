@@ -14,17 +14,14 @@ static void task_led(void *arg);
 static void task_0(void);
 static void task_1(void);
 
-static uint8_t stack_led[2][STACK_SIZE];
-static uint8_t stack_task[2][STACK_SIZE];
-
-static sem_t sem_rw = {0};
+static sem_t sem_rw = { 0 };
 
 // static led_s led[2] = {{0, 0x05}, {1, 0x15}};
-led_s led[2] = {{0, 0x0}, {1, 0x0}};
+led_s led[2] = { { 0, 0x0 }, { 1, 0x0 } };
 
 void task_led(void *arg)
 {
-	led_s *led_val = (led_s *)arg;
+	led_s *led_val = (led_s *) arg;
 
 	for (uint8_t i = 0;; i++)
 	{
@@ -70,11 +67,15 @@ void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
 
+	uint8_t *stack_led0 = (uint8_t *) malloc(STACK_SIZE);
+	uint8_t *stack_led1 = (uint8_t *) malloc(STACK_SIZE);
+	uint8_t *stack_task0 = (uint8_t *) malloc(STACK_SIZE);
+	uint8_t *stack_task1 = (uint8_t *) malloc(STACK_SIZE);
 	//led闪烁
-	pcb_create(PRIO_TASK_0, &task_led, (void *)&led[0], &stack_led[0][STACK_SIZE]);
-	pcb_create(PRIO_TASK_1, &task_led, (void *)&led[1], &stack_led[1][STACK_SIZE]);
+	pcb_create(PRIO_TASK_0, &task_led, (void *) &led[0], &stack_led0[STACK_SIZE]);
+	pcb_create(PRIO_TASK_1, &task_led, (void *) &led[1], &stack_led1[STACK_SIZE]);
 
 	//信号量示例
-	pcb_create(PRIO_TASK_2, &task_0, NULL, &stack_task[0][STACK_SIZE]);
-	pcb_create(PRIO_TASK_3, &task_1, NULL, &stack_task[1][STACK_SIZE]);
+	pcb_create(PRIO_TASK_2, &task_0, NULL, &stack_task0[STACK_SIZE]);
+	pcb_create(PRIO_TASK_3, &task_1, NULL, &stack_task1[STACK_SIZE]);
 }
