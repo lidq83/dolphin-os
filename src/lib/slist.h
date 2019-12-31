@@ -7,6 +7,7 @@
 #ifndef __SRC_LIB_SLIST_H
 #define __SRC_LIB_SLIST_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 

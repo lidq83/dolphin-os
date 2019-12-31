@@ -9,7 +9,7 @@ CFLAGS	 =	-Wall -g -mlittle-endian -mthumb -nostdlib -ffreestanding
 CFLAGS	+=	-mcpu=cortex-m3
 CFLAGS	+=	-I./
 LDFLAGS	:= 	-g
-objs 	:= 	vector.o main.o debug.o systick.o
+objs 	:= 	vector.o main.o debug.o systick.o string.o
 
 # os 部分
 CFLAGS		+=-D GCC_BUILD
@@ -18,10 +18,6 @@ CFLAGS		+=-I./../../src/lib
 CFLAGS		+=-I./../../src/kernel/
 
 KERNEL_DIR	=../../kernel
-# objs		+=$(KERNEL_DIR)/core.o \
-# 	$(KERNEL_DIR)/idle.o \
-# 	$(KERNEL_DIR)/sleep.o\
-# 	$(KERNEL_DIR)/switch_gcc.o
 	
 KERNEL_PATH	=	../../src
 

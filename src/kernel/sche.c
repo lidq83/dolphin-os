@@ -85,7 +85,7 @@ void sleep_ticks(uint32_t tick)
 	p_curr->sleep_tick = tick;
 	//挂起当前进程
 	pcb_block(p_curr);
-	//将当前进程
+	//将当前进程加入休眠队列
 	slist_append(&sleep_list, p_curr, p_curr);
 
 	pcb_next = pcb_get_highest_pcb();
@@ -116,13 +116,13 @@ void wakeup(void)
 		if (pcb->sleep_tick == 0)
 		{
 			//将休眠结束的pcb移出休眠队列
-			slist_remove(&sleep_list, p, NULL);			
+			slist_remove(&sleep_list, p, NULL);
 			//将休眠结束的pcb加入就绪队列
 			pcb_ready(pcb);
 		}
 		else
 		{
 			p = &(*p)->next;
-		}		
+		}
 	}
 }

@@ -8,7 +8,7 @@
 #include "slist.h"
 
 //第一个空闲位置
-static uint8_t map_first_one[256] = {
+const uint8_t map_first_one[256] = {
 	/* 00 */ 0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
 	/* 10 */ 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
 	/* 20 */ 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
@@ -36,10 +36,9 @@ int slist_init(slist_s *list)
 		return -1;
 	}
 
-	//memset(list, 0, sizeof(slist_s));
-		
+	memset(list, 0, sizeof(slist_s));
 	//初始化位图，所有位置均可用
-	list->use_map = 0xffffffff;
+	list->use_map = ~0x1;
 	return 0;
 }
 
@@ -62,6 +61,7 @@ int slist_append(slist_s *list, void *key, void *value)
 	{
 		return -1;
 	}
+	
 	//申请节点
 	slist_alloc(list, ind);
 	//设置新节点的值
@@ -83,7 +83,6 @@ int slist_append(slist_s *list, void *key, void *value)
 		p = &(*p)->next;
 	}
 	*p = node_new;
-
 	return 0;
 }
 
@@ -141,7 +140,6 @@ uint32_t slist_first_empty(slist_s *list)
 	{
 		return map_first_one[(list->use_map & 0xff000000) >> 24] + 24;
 	}
-
 	return 0xffffffff;
 }
 
