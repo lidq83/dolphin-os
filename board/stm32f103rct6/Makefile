@@ -45,7 +45,7 @@ CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
-CFLAGS		+=	-I$(KERNEL_PATH)/vfs
+CFLAGS		+=	-I$(KERNEL_PATH)/fs
 CFLAGS		+=	-I$(KERNEL_PATH)/drv
 
 #------------------------------------------------------------------------#
@@ -84,6 +84,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/kernel/switch.S \
 				$(KERNEL_PATH)/mm/mm.c \
+				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/lib/slist.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s
