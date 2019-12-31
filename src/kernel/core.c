@@ -8,7 +8,6 @@
 #include <core.h>
 #include <pcb.h>
 #include <sche.h>
-#include <led.h>
 #include <mm.h>
 
 extern pcb_s *pcb_next;

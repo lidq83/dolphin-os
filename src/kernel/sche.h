@@ -7,7 +7,7 @@
 #ifndef __SRC_KERNEL_SCHE_H
 #define __SRC_KERNEL_SCHE_H
 
-#include <typedef.h>
+#include <stdint.h>
 #include <pcb.h>
 
 //

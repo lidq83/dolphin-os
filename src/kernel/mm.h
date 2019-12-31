@@ -11,7 +11,10 @@
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
-#include <board.h>
+
+#ifndef MM_SIZE_HEAP
+#define MM_SIZE_HEAP    (1024 * 42)
+#endif 
 
 #define MM_MIN_SHIFT            4
 #define MM_MIN_CHUNK            (1 << MM_MIN_SHIFT)
