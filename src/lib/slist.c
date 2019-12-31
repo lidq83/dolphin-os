@@ -30,13 +30,14 @@ static uint8_t map_first_one[256] = {
 
 //初始化链表
 int slist_init(slist_s *list)
-{
+{   
 	if (list == NULL)
 	{
 		return -1;
 	}
 
-	memset(list, 0, sizeof(slist_s));
+	//memset(list, 0, sizeof(slist_s));
+		
 	//初始化位图，所有位置均可用
 	list->use_map = 0xffffffff;
 	return 0;
