@@ -9,6 +9,7 @@
 #include <pcb.h>
 #include <sche.h>
 #include <mm.h>
+#include <vfs.h>
 
 extern pcb_s *pcb_next;
 
@@ -32,6 +33,8 @@ void process_idle(void)
 void kernel_startup(void)
 {
 	mm_init();
+
+	vfs_init();
 
 	sche_init();
 

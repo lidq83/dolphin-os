@@ -4,13 +4,12 @@
  *  Created on: December 25, 2019
  *      Author: lidq
  */
-#ifndef __SRC_KERNEL_MM_H
-#define __SRC_KERNEL_MM_H
+#ifndef __SRC_MM_MM_H
+#define __SRC_MM_MM_H
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include <time.h>
 
 #ifndef MM_SIZE_HEAP
 #define MM_SIZE_HEAP    (1024 * 42)
