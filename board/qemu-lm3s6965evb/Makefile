@@ -1,56 +1,78 @@
-TOOL_CHAIN = arm-none-eabi-
-CC 		= ${TOOL_CHAIN}gcc
-AS 		= ${TOOL_CHAIN}as
-LD 		= ${TOOL_CHAIN}ld
-OBJCOPY = ${TOOL_CHAIN}objcopy
-OBJDUMP = $(TOOL_CHAIN)objdump
+#------------------------------------------------------------------------#
+# Output files
+ELF_FILE	=	dolphin-os.elf
+BIN_FILE	=	dolphin-os.bin
+HEX_FILE	=	dolphin-os.hex
+INFO_FILE	=	dolphin-os.info
+CODE_FILE	=	dolphin-os.code
 
-CFLAGS	 =	-Wall -g -mlittle-endian -mthumb -nostdlib -ffreestanding
-CFLAGS	+=	-mcpu=cortex-m3
-CFLAGS	+=	-I./
-LDFLAGS	:= 	-g
-objs 	:= 	vector.o main.o debug.o systick.o string.o
+#------------------------------------------------------------------------#
+# Cross Compiler
+CC			=	arm-none-eabi-gcc
+OBJCOPY		=	arm-none-eabi-objcopy
+OBJDUMP		=	arm-none-eabi-objdump
+READELF		=	arm-none-eabi-readelf
 
-# os 部分
-CFLAGS		+=-D GCC_BUILD
+#------------------------------------------------------------------------#
+# Flags
+CFLAGS		+=	-g
+CFLAGS		+=	-mthumb
+CFLAGS		+=	-Wno-incompatible-pointer-types
+CFLAGS		+=	-Wno-unused-but-set-variable
+CFLAGS		+=	-Wno-unused-variable
+CFLAGS		+=	-mcpu=cortex-m3
+CFLAGS		+=	-I./
+CFLAGS		+=	-D"assert_param(expr)=((void)0)"
+CFLAGS		+=	-D STM32F10X_MD
+CFLAGS		+=	-nostartfiles
 
-CFLAGS		+=-I./../../src/lib
-CFLAGS		+=-I./../../src/kernel/
+#------------------------------------------------------------------------#
+# Link script
+CFLAGS		+=	-Wl,-Tstm32_flash.ld
 
-KERNEL_DIR	=../../kernel
-	
 KERNEL_PATH	=	../../src
+CFLAGS		+=	-I./src
+CFLAGS		+=	-I$(KERNEL_PATH)/kernel
+CFLAGS		+=	-I$(KERNEL_PATH)/lib
 
-objs	+=	$(KERNEL_PATH)/kernel/core.o \
-			$(KERNEL_PATH)/kernel/pcb.o \
-			$(KERNEL_PATH)/kernel/sche.o \
-			$(KERNEL_PATH)/kernel/switch.o \
-			$(KERNEL_PATH)/kernel/mm.o \
-			$(KERNEL_PATH)/kernel/sem.o \
-			$(KERNEL_PATH)/lib/slist.o
+#------------------------------------------------------------------------#
+# Main function
+SRC			+=	./src/main.c \
+				./src/debug.c \
+				./src/string.c \
+				./src/systick.c \
+				./src/vector.c
 
-lidqos.bin: $(objs) $(SRC)
-	${LD} -T lidqos.ld -o lidqos.elf $^
-	${OBJCOPY} -O binary -S lidqos.elf $@
-	${OBJDUMP} -D -m arm lidqos.elf > lidqos.dis
+SRC			+=	$(KERNEL_PATH)/kernel/core.c \
+				$(KERNEL_PATH)/kernel/pcb.c \
+				$(KERNEL_PATH)/kernel/sche.c \
+				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/kernel/switch.S \
+				$(KERNEL_PATH)/kernel/mm.c \
+				$(KERNEL_PATH)/lib/slist.c
 
-run: $(objs)
-	${LD} -T lidqos.ld -o lidqos.elf $^
-	${OBJCOPY} -O binary -S lidqos.elf lidqos.bin
-	${OBJDUMP} -D -m arm lidqos.elf > lidqos.dis
-	qemu-system-arm -M lm3s6965evb --kernel lidqos.bin -nographic
+all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
 
-debug: $(objs)
-	${LD} -T lidqos.ld -o lidqos.elf $^
-	${OBJCOPY} -O binary -S lidqos.elf lidqos.bin
-	${OBJDUMP} -D -m arm lidqos.elf > lidqos.dis
-	qemu-system-arm -M lm3s6965evb --kernel lidqos.bin -nographic -s -S
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O binary $^ $@
 
-%.o:%.c 
-	${CC} $(CFLAGS) -c -o $@ $<
+$(HEX_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O ihex $^ $@
 
-%.o:%.s
-	${CC} $(CFLAGS) -c -o $@ $<
+$(INFO_FILE):$(ELF_FILE)
+	$(READELF) -a $^ > $@
+
+$(CODE_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $^ > $@
+
+$(ELF_FILE):$(SRC)
+	$(CC) $(CFLAGS)	$^ -o $@
+
+run:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -nographic
+
+debug:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -nographic -s -S
 
 clean:
-	rm -rf *.o *.elf *.bin *.dis
+	@rm -rvf *.o *.bin *.code *.elf *.hex *.info
