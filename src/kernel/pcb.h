@@ -8,9 +8,12 @@
 #define __SRC_KERNEL_PCB_H
 
 #include <stdint.h>
+#include <vfs.h>
 
+//支持最多32个文件描述符
+#define FNODE_SIZE		(32)
 //支持最多32个进程
-#define PROCESS_CNT (32)
+#define PROCESS_CNT     (32)
 
 //进程控制块Process Control Block
 typedef struct pcb_s
@@ -21,6 +24,10 @@ typedef struct pcb_s
     uint8_t prio;
     //任务休眠ticks
     uint32_t sleep_tick;
+    //进程的文件描位图，1表示空闲，0表示使用
+    uint32_t f_use_map;
+    //进程的文件描述符
+    vfs_node_s *fnodes[FNODE_SIZE];
 } pcb_s;
 
 void *stack_init(void *p_entry, void *p_arg, void *stack);

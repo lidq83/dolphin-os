@@ -12,7 +12,7 @@
 #include <string.h>
 
 #ifndef MM_SIZE_HEAP
-#define MM_SIZE_HEAP    (1024 * 42)
+#define MM_SIZE_HEAP    (1024 * 40)
 #endif 
 
 #define MM_MIN_SHIFT            4

@@ -15,22 +15,25 @@
 
 #define NODE_NAME_SIZE (64)
 
+struct file
+{
+};
+
 typedef struct file_operations_s
 {
-	int (*open)(char *, int);
-	int (*close)(int);
-	int (*read)(int, unsigned char *, unsigned int);
-	int (*write)(int, unsigned char *, unsigned int);
-	int (*ioctl)(int, unsigned int, unsigned long);
+	int (*open)(struct file *);
+	int (*close)(struct file *);
+	size_t (*read)(struct file *, void *, size_t);
+	size_t (*write)(struct file *, const void *, size_t);
+	int (*ioctl)(struct file *, unsigned int, unsigned long);
 } file_operations_s;
 
 typedef struct vfs_node_s
 {
-	struct vfs_node_s *parent;
 	struct vfs_node_s *sibling;
 	struct vfs_node_s *child;
 	char name[NODE_NAME_SIZE];
-	file_operations_s ops;
+	struct file_operations_s ops;
 } vfs_node_s;
 
 typedef struct vfs_s

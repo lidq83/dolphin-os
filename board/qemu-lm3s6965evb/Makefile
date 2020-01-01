@@ -52,6 +52,8 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/switch.S \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/fs/vfs.c \
+				$(KERNEL_PATH)/fs/fs.c \
+				$(KERNEL_PATH)/fs/fcntl.c \
 				$(KERNEL_PATH)/lib/slist.c
 
 all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)

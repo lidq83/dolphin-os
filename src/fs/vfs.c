@@ -28,7 +28,6 @@ int vfs_init(void)
 
     vfs->root->child = NULL;
     vfs->root->sibling = NULL;
-    vfs->root->parent = NULL;
 
     vfs->root->ops.open = NULL;
     vfs->root->ops.close = NULL;
@@ -208,7 +207,6 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 
     node_new->child = NULL;
     node_new->sibling = NULL;
-    node_new->parent = *node;
     memset(&node_new->ops, 0, sizeof(file_operations_s));
 
     *node = node_new;

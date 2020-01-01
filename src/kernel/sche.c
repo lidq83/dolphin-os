@@ -43,7 +43,6 @@ void sche_tick(void)
 
 	//唤醒休眠完成的进程
 	wakeup();
-
 	//获取最高优先级的进程
 	pcb_next = pcb_get_highest_pcb();
 	//如果最高优先级进程就是当前进程，则进行跳转返回
@@ -51,7 +50,6 @@ void sche_tick(void)
 	{
 		goto _out;
 	}
-
 	if (pcb_current == NULL)
 	{
 		sche_switch_first();
@@ -95,7 +93,6 @@ void sleep_ticks(uint32_t tick)
 		//触发调度
 		sche_switch();
 	}
-
 	//开中断
 	sche_interrupt_enable();
 }

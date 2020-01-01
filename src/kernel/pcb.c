@@ -72,6 +72,10 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t *stack)
 	pcbs[prio].prio = prio;
 	//休眠tick数
 	pcbs[prio].sleep_tick = 0;
+	//文件使用位图
+	pcbs[prio].f_use_map = ~0x7;
+	//初始化文件描述符
+	memset(pcbs[prio].fnodes, 0, sizeof(void*) * FNODE_SIZE);
 	//将空闲进程放入就绪队列
 	pcb_ready(&pcbs[prio]);
 	//返回pcb地址
