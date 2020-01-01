@@ -34,6 +34,8 @@ KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
+CFLAGS		+=	-I$(KERNEL_PATH)/mm
+CFLAGS		+=	-I$(KERNEL_PATH)/fs
 
 #------------------------------------------------------------------------#
 # Main function
@@ -48,7 +50,8 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/kernel/switch.S \
-				$(KERNEL_PATH)/kernel/mm.c \
+				$(KERNEL_PATH)/mm/mm.c \
+				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/lib/slist.c
 
 all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
