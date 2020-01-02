@@ -12,15 +12,13 @@
 
 extern led_s led[2];
 
-static uint8_t stack[STACK_SIZE] = {0};
-
 buff_s buff_fifo = {0};
 
 static void pwmout_run(void);
 
 void pwmout_init()
 {
-	pcb_create(PRIO_PWMOUT, &pwmout_run, NULL, &stack[STACK_SIZE]);
+	pcb_create(PRIO_PWMOUT, &pwmout_run, NULL, STACK_SIZE);
 }
 
 void pwmout_run()

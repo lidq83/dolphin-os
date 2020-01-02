@@ -89,6 +89,7 @@ void *malloc(unsigned int size)
 	//释放信号量
 	sem_post(&sem_rw);
 	//返回内存地址
+	//printf("malloc %x\n", addr);
 	return addr;
 }
 
@@ -135,6 +136,7 @@ void* mm_alloc(unsigned int size)
 	//在内存块中循环查找合适的空闲块
 	while (1)
 	{
+		//printf("malloc p %x %d\n", p, p->use_flag);
 		//如果当前块为空闲块则进行后续大小判断处理
 		if (!p->use_flag)
 		{

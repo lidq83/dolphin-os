@@ -40,7 +40,7 @@ CFLAGS		+=	-I$(KERNEL_PATH)/fs
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main.c \
-				./src/debug.c \
+				./src/k_printf.c \
 				./src/string.c \
 				./src/systick.c \
 				./src/vector.c

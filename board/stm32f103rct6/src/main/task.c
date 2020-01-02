@@ -67,15 +67,11 @@ void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
 
-	uint8_t *stack_led0 = (uint8_t *) malloc(STACK_SIZE);
-	uint8_t *stack_led1 = (uint8_t *) malloc(STACK_SIZE);
-	uint8_t *stack_task0 = (uint8_t *) malloc(STACK_SIZE);
-	uint8_t *stack_task1 = (uint8_t *) malloc(STACK_SIZE);
 	//led闪烁
-	pcb_create(PRIO_TASK_0, &task_led, (void *) &led[0], &stack_led0[STACK_SIZE]);
-	pcb_create(PRIO_TASK_1, &task_led, (void *) &led[1], &stack_led1[STACK_SIZE]);
+	pcb_create(PRIO_TASK_0, &task_led, (void *) &led[0], STACK_SIZE);
+	pcb_create(PRIO_TASK_1, &task_led, (void *) &led[1], STACK_SIZE);
 
 	//信号量示例
-	pcb_create(PRIO_TASK_2, &task_0, NULL, &stack_task0[STACK_SIZE]);
-	pcb_create(PRIO_TASK_3, &task_1, NULL, &stack_task1[STACK_SIZE]);
+	pcb_create(PRIO_TASK_2, &task_0, NULL, STACK_SIZE);
+	pcb_create(PRIO_TASK_3, &task_1, NULL, STACK_SIZE);
 }

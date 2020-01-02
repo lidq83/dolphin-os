@@ -1,45 +1,17 @@
-
 #include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
+#include <k_printf.h>
 
-volatile uint32_t *const UART0DR = (uint32_t *)0x4000C000;
-
-char send_char(uint8_t *ch)
-{
-    *UART0DR = *ch;
-    return *ch;
-}
-
-int printf_char(char ch)
-{
-    uint8_t c1 = (uint8_t)'\r';
-    uint8_t c2 = 0;
-    c2 = (uint8_t)ch;
-    send_char(&c2);
-
-    if (((uint8_t)'\n') == c2)
-    {
-        send_char(&c1);
-    }
-
-    return 0;
-}
-
-int printf_str(char *str)
-{
-    while (str && (*str != (char)'\0'))
-    {
-        printf_char(*str);
-        str++;
-    }
-
-    return 0;
-}
+volatile char *const UART0DR = (char *)0x4000C000;
+volatile char _buff[256] = {0};
+volatile char _temp[256] = {0};
+volatile char _num[20] = "0123456789ABCDEFG";
 
 void putchar(char ch)
 {
-    printf_char(ch);
+    *UART0DR = ch;
+    return ch;
 }
 
 /*
@@ -52,16 +24,13 @@ void putchar(char ch)
  */
 void number_to_str(char *buff, int number, int hex)
 {
-    char temp[0x800];
-    char num[0x20] = "0123456789ABCDEFG";
-
     int i = 0;
     int length = 0;
     int rem;
     char sign = '+';
 
     //反向加入temp
-    temp[i++] = '\0';
+    _temp[i++] = '\0';
     if (number < 0)
     {
         sign = '-';
@@ -69,37 +38,37 @@ void number_to_str(char *buff, int number, int hex)
     }
     else if (number == 0)
     {
-        temp[i++] = '0';
+        _temp[i++] = '0';
     }
 
     //将数字转为字符串
     while (number > 0)
     {
         rem = number % hex;
-        temp[i++] = num[rem];
+        _temp[i++] = _num[rem];
         number = number / hex;
     }
     //处理符号
     if (sign == '-')
     {
-        temp[i++] = sign;
+        _temp[i++] = sign;
     }
     length = i;
 
     //返向拷贝到buff缓冲区
     for (i = length - 1; i >= 0; i--)
     {
-        *buff++ = temp[i];
+        *buff++ = _temp[i];
     }
 }
 
 /*
- * puts : 显示字符串
+ * k_puts : 显示字符串
  *  - int tty_id : tty编号
  *  - char *str : 字符串
  * return : void
  */
-int puts(char *str)
+int k_puts(char *str)
 {
     int count = 0;
     while (*str != '\0')
@@ -111,15 +80,13 @@ int puts(char *str)
 }
 
 /***
- * 标准输出函数
+ * k_printf标准输出函数
  * char *fmt: 格式化字符串
  * 动态参数
  * return: 显示字符个数
  */
-int printf(char *fmt, ...)
+int k_printf(char *fmt, ...)
 {
-    //显示数字缓冲区
-    char buff[0x800];
     //显示字符串指针
     char *str;
     //显示字符变量
@@ -133,7 +100,7 @@ int printf(char *fmt, ...)
     va_start(args, fmt);
 
     //读到\0为结束
-    while (*fmt != '\0')
+    while (*fmt != 0)
     {
         //格式化标记%
         if (*fmt == '%')
@@ -150,14 +117,14 @@ int printf(char *fmt, ...)
             else if ('s' == *(fmt + 1))
             {
                 str = va_arg(args, char *);
-                count += puts(str);
+                count += k_puts(str);
                 fmt += 2;
             }
             //显示整数
             else if ('d' == *(fmt + 1))
             {
-                number_to_str(buff, va_arg(args, int), 10);
-                count += puts(buff);
+                number_to_str(_buff, va_arg(args, int), 10);
+                count += k_puts(_buff);
                 fmt += 2;
             }
             //显示无符号16进制整数
@@ -166,24 +133,24 @@ int printf(char *fmt, ...)
                 uint32_t num = va_arg(args, uint32_t);
                 uint32_t nl = num & 0xffff;
                 uint32_t nh = (num >> 16) & 0xffff;
-                count += puts("0x");
+                count += k_puts("0x");
                 if (nh == 0)
                 {
-                    number_to_str(buff, nl, 16);
-                    count += puts(buff);
+                    number_to_str(_buff, nl, 16);
+                    count += k_puts(_buff);
                 }
                 else
                 {
-                    number_to_str(buff, nh, 16);
-                    count += puts(buff);
+                    number_to_str(_buff, nh, 16);
+                    count += k_puts(_buff);
 
-                    number_to_str(buff, nl, 16);
-                    int zero = 4 - strlen(buff);
+                    number_to_str(_buff, nl, 16);
+                    int zero = 4 - strlen(_buff);
                     for (int i = 0; i < zero; i++)
                     {
                         putchar('0');
                     }
-                    count += puts(buff);
+                    count += k_puts(_buff);
                 }
                 fmt += 2;
             }

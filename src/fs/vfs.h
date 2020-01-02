@@ -7,13 +7,12 @@
 #ifndef __SRC_VFS_VFS_H
 #define __SRC_VFS_VFS_H
 
-#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sem.h>
 
-#define NODE_NAME_SIZE (64)
+#define NODE_NAME_SIZE (128)
 
 struct file
 {

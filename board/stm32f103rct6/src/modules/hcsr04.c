@@ -12,8 +12,6 @@
 
 extern led_s led[2];
 
-static uint8_t stack[STACK_SIZE] = {0};
-
 static void gpio_init(void);
 
 static void trig_on(void);
@@ -26,7 +24,7 @@ void hcsr04_init()
 {
 	gpio_init();
 
-	pcb_create(PRIO_HCSR04, &hcsr04_run, NULL, &stack[STACK_SIZE]);
+	pcb_create(PRIO_HCSR04, &hcsr04_run, NULL, STACK_SIZE);
 }
 
 void hcsr04_run()

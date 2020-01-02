@@ -46,7 +46,6 @@ int open(char *path, int oflag, int mode)
     }
 
     pcb_s *pcb = sche_curr_pcb();
-
     if (node->ops.open == NULL)
     {
         return -1;
@@ -62,7 +61,6 @@ int open(char *path, int oflag, int mode)
     //申请节点
     fcntl_alloc(pcb, ind);
     pcb->fnodes[ind] = node;
-
     return ind;
 }
 
