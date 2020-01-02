@@ -7,9 +7,6 @@
 
 #include <string.h>
 #include <uart1.h>
-#include <protocol.h>
-
-extern buff_s buff_fifo;
 
 void UART1_GPIO_Configuration(void)
 {
@@ -45,14 +42,14 @@ void UART1_Configuration(void)
 
 u8 Uart1_PutChar(u8 ch)
 {
-	USART_SendData(USART1, (u8) ch);
+	USART_SendData(USART1, (u8)ch);
 	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	{
 	}
 	return ch;
 }
 
-void Uart1_PutString(u8* buf, u8 len)
+void Uart1_PutString(u8 *buf, u8 len)
 {
 	for (u8 i = 0; i < len; i++)
 	{
@@ -68,7 +65,7 @@ void USART1_IRQHandler(void)
 		{
 		}
 		u8 ch = USART_ReceiveData(USART1);
-		protocol_buff_append(&buff_fifo, &ch, 1);
+		//TODO: append ch to some bufferr.
 	}
 }
 

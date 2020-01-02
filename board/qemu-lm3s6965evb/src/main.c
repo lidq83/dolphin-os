@@ -105,15 +105,15 @@ int main(int argc, char **argv)
 	kernel_startup();
 	//初始化标准输入输出设备
 	stddev_init();
-	//打开系统时钟，启动任务切换
-	systick_init();
 	//创建pcb资源清理进程
 	pcb_clear_process();
-
 	//系统时钟初始化，在系统中断服务程序中任务调度
 	pcb_create(0, task0_entry, NULL, STATCK_SIZE);
 	pcb_create(1, task1_entry, NULL, STATCK_SIZE);
 	pcb_create(2, task2_entry, NULL, STATCK_SIZE_LONG);
+
+	//打开系统时钟，启动任务切换
+	systick_init();
 
 	while (1)
 	{

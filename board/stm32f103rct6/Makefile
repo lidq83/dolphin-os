@@ -65,18 +65,14 @@ SRC			+=	./src/main/system_stm32f10x.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
-				./src/main/task.c
+				./src/main/task.c \
+				./src/modules/stddev.c
 
 #------------------------------------------------------------------------#
 # Modules
 SRC			+=	./src/hardware/led.c \
 				./src/hardware/sysclk.c \
-				./src/hardware/tim2.c \
-				./src/hardware/tim3.c \
-				./src/hardware/uart1.c \
-				./src/modules/protocol.c \
-				./src/modules/hcsr04.c \
-				./src/modules/pwmout.c
+				./src/hardware/uart1.c
 
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \

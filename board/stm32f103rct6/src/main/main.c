@@ -7,15 +7,11 @@
 
 #include <typedef.h>
 #include <led.h>
-#include <tim2.h>
-#include <tim3.h>
 #include <uart1.h>
-#include <hcsr04.h>
 #include <core.h>
-#include <protocol.h>
-#include <pwmout.h>
 #include <sysclk.h>
 #include <task.h>
+#include <stddev.h>
 
 static void rcc_config();
 
@@ -27,22 +23,18 @@ int main(int argc, char *argv[])
 
 	led_init();
 
+	uart1_init();
+
 	kernel_startup();
+
+	stddev_init();
+
+	pcb_clear_process();
 
 	task_led_blink();
 
-	uart1_init();
-
-	tim2_pwm_init();
-
-	tim3_in_init();
-
-	hcsr04_init();
-
-	pwmout_init();
-
 	sysclk_init();
-	
+
 	while (1)
 	{
 	}
