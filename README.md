@@ -26,3 +26,6 @@ Dolphin-OS是一款嵌入式的多任务、抢占式、实时操作系统。
 - 支持虚拟文件系统，可由用户注册和删除设备节点。
 - 支持POSIX文件操作标准(open、close、read、write、ioctl)。
 - 支持QEMU仿真模拟，完成printf格式化输出函数。
+- 支持stdin、stdout和stderr设备节点。
+- 支持pcb进程运行后自动终止和运行中动态创建。
+- 支持pcb进程内存清理，回收终止的pcb占用的内存资源
