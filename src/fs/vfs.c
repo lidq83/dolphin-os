@@ -23,7 +23,7 @@ int vfs_init(void)
     vfs = malloc(sizeof(vfs_s));
     sem_init(&vfs->sem_rw, 1);
     vfs->root = malloc(sizeof(vfs_node_s));
-    strcpy(vfs->root->name, "/");
+    k_strcpy(vfs->root->name, "/");
     vfs->root->child = NULL;
     vfs->root->sibling = NULL;
 
@@ -152,7 +152,7 @@ vfs_node_s *vfs_find_node_in_sibling(vfs_node_s *node, char *node_name)
 {
     while (node != NULL)
     {
-        if (strcmp(node->name, node_name) == 0)
+        if (k_strcmp(node->name, node_name) == 0)
         {
             return node;
         }
@@ -191,7 +191,7 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 
     while (*node != NULL)
     {
-        if (strcmp((*node)->name, node_name) == 0)
+        if (k_strcmp((*node)->name, node_name) == 0)
         {
             return vfs_insert_node_r(&(*node)->child, p, ops);
         }
@@ -199,11 +199,11 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
     }
 
     vfs_node_s *node_new = malloc(sizeof(vfs_node_s));
-    strcpy(node_new->name, node_name);
+    k_strcpy(node_new->name, node_name);
 
     node_new->child = NULL;
     node_new->sibling = NULL;
-    memset(&node_new->ops, 0, sizeof(file_operations_s));
+    k_memset(&node_new->ops, 0, sizeof(file_operations_s));
 
     *node = node_new;
 
@@ -212,7 +212,7 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
         return vfs_insert_node_r(&node_new->child, p, ops);
     }
 
-    memcpy(&node_new->ops, &ops, sizeof(file_operations_s));
+    k_memcpy(&node_new->ops, &ops, sizeof(file_operations_s));
     return 0;
 }
 
@@ -241,7 +241,7 @@ int vfs_remove_node_r(vfs_node_s **node, char *abs_path)
 
     while (*node != NULL)
     {
-        if (strcmp((*node)->name, node_name) == 0)
+        if (k_strcmp((*node)->name, node_name) == 0)
         {
             goto _found_node;
         }

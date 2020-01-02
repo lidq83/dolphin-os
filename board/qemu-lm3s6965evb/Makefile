@@ -19,6 +19,7 @@ CFLAGS		+=	-g
 CFLAGS		+=	-mthumb
 CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
+CFLAGS		+=	-Wno-int-conversion
 CFLAGS		+=	-Wno-unused-variable
 CFLAGS		+=	-mcpu=cortex-m3
 CFLAGS		+=	-I./
@@ -40,10 +41,9 @@ CFLAGS		+=	-I$(KERNEL_PATH)/fs
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main.c \
-				./src/k_printf.c \
-				./src/string.c \
 				./src/systick.c \
-				./src/vector.c
+				./src/vector.c \
+				./src/stddev.c
 
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
@@ -54,7 +54,9 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \
 				$(KERNEL_PATH)/fs/fcntl.c \
-				$(KERNEL_PATH)/lib/slist.c
+				$(KERNEL_PATH)/lib/slist.c \
+				$(KERNEL_PATH)/lib/k_string.c \
+				$(KERNEL_PATH)/lib/k_printf.c
 
 all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
 

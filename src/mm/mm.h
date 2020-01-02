@@ -9,10 +9,10 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <string.h>
+#include <k_string.h>
 
 #ifndef MM_SIZE_HEAP
-#define MM_SIZE_HEAP    (1024 * 40)
+#define MM_SIZE_HEAP    (1024 * 36)
 #endif 
 
 #define MM_MIN_SHIFT            4

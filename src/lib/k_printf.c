@@ -1,16 +1,21 @@
+/*
+ * stdio.c
+ *
+ *  Created on: January 2, 2020
+ *      Author: lidq
+ */
+
 #include <stdint.h>
 #include <stdarg.h>
-#include <string.h>
+#include <k_string.h>
 #include <k_printf.h>
+#include <fcntl.h>
 
-volatile char *const UART0DR = (char *)0x4000C000;
-volatile char _buff[256] = {0};
-volatile char _temp[256] = {0};
-volatile char _num[20] = "0123456789ABCDEFG";
+const char _num[20] = "0123456789ABCDEFG";
 
-void putchar(char ch)
+char k_putchar(char ch)
 {
-    *UART0DR = ch;
+    write(1, &ch, sizeof(char));
     return ch;
 }
 
@@ -24,6 +29,7 @@ void putchar(char ch)
  */
 void number_to_str(char *buff, int number, int hex)
 {
+    char _temp[128] = {0};
     int i = 0;
     int length = 0;
     int rem;
@@ -73,7 +79,7 @@ int k_puts(char *str)
     int count = 0;
     while (*str != '\0')
     {
-        putchar(*str++);
+        k_putchar(*str++);
         count++;
     }
     return count;
@@ -87,6 +93,7 @@ int k_puts(char *str)
  */
 int k_printf(char *fmt, ...)
 {
+    char _buff[256] = {0};
     //显示字符串指针
     char *str;
     //显示字符变量
@@ -108,8 +115,8 @@ int k_printf(char *fmt, ...)
             //显示一个字符
             if ('c' == *(fmt + 1))
             {
-                ch = va_arg(args, char);
-                putchar(ch);
+                ch = va_arg(args, int);
+                k_putchar(ch);
                 count++;
                 fmt += 2;
             }
@@ -145,10 +152,10 @@ int k_printf(char *fmt, ...)
                     count += k_puts(_buff);
 
                     number_to_str(_buff, nl, 16);
-                    int zero = 4 - strlen(_buff);
+                    int zero = 4 - k_strlen(_buff);
                     for (int i = 0; i < zero; i++)
                     {
-                        putchar('0');
+                        k_putchar('0');
                     }
                     count += k_puts(_buff);
                 }
@@ -158,7 +165,7 @@ int k_printf(char *fmt, ...)
         //显示普通字符
         else
         {
-            putchar(*fmt++);
+            k_putchar(*fmt++);
             count++;
         }
     }

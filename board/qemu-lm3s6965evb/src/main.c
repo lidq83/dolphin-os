@@ -3,10 +3,10 @@
 #include <sche.h>
 #include <fcntl.h>
 #include <fs.h>
-#include "k_printf.h"
+#include <stddev.h>
 #include "systick.h"
 
-#define STATCK_SIZE 512
+#define STATCK_SIZE 1024
 #define STATCK_SIZE_LONG 1024
 
 //任务0入口函数
@@ -15,7 +15,7 @@ void task0_entry(void *arg)
 	while (1)
 	{
 		sleep_ticks(1500);
-		k_printf("run thread 0\n");
+		k_printf("run process0\n");
 	}
 }
 
@@ -25,7 +25,7 @@ void task1_entry(void *arg)
 	while (1)
 	{
 		sleep_ticks(1500);
-		k_printf("run thread 1\n");
+		k_printf("run process1\n");
 	}
 }
 
@@ -69,16 +69,16 @@ void task2_entry(void *arg)
 	ops.write = t_write;
 	ops.ioctl = t_ioctl;
 
-	k_printf("task2\n");
+	k_printf("run process2\n");
 
-	int ret = fs_register_dev("/dev/task2", ops);
+	int ret = fs_register_dev("/dev/process2", ops);
 	if (ret < 0)
 	{
 		k_printf("reg err!\n");
 		return;
 	}
 
-	int fd = open("/dev/task2", 0, 0);
+	int fd = open("/dev/process2", 0, 0);
 	if (fd < 0)
 	{
 		k_printf("open err!\n");
@@ -101,12 +101,14 @@ void task2_entry(void *arg)
 
 int main(int argc, char **argv)
 {
-	k_printf("Dolphin-OS startup.\n");
-
 	//操作系统初始化，为TCB分配内存空间，同时启动空闲任务
 	kernel_startup();
-
+	//初始化标准输入输出设备
+	stddev_init();
+	//打开系统时钟，启动任务切换
 	systick_init();
+	//创建pcb资源清理进程
+	pcb_clear_process();
 
 	//系统时钟初始化，在系统中断服务程序中任务调度
 	pcb_create(0, task0_entry, NULL, STATCK_SIZE);

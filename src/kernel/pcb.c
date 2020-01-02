@@ -39,16 +39,29 @@ pcb_s pcbs[PROCESS_CNT] = {0};
 extern void sche_interrupt_disable(void);
 //开中断
 extern void sche_interrupt_enable(void);
-//不保存现场切换任务
-extern void PendSVHandler_nosave(void);
 
 //当前正在运行的pcb
 extern pcb_s *pcb_current;
 //下一个需要运行的pcb
 extern pcb_s *pcb_next;
+//下一个需要运行的pcb
+extern pcb_s *pcb_need_kill;
 
 //pcb运行函数
 static void pcb_runner(void);
+
+//初始化进程栈
+void *stack_init(uint32_t *stack);
+
+//清除已经结束的进程资源
+static void pcb_clear_stoped(void);
+
+//创建清理pcb资源进程
+void pcb_clear_process(void)
+{
+	//pcb资源进程优先级30
+	pcb_create(PROCESS_CNT - 2, &pcb_clear_stoped, NULL, 1024);
+}
 
 //初始化进程栈
 void *stack_init(uint32_t *stack)
@@ -86,6 +99,8 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	{
 		return NULL;
 	}
+	//初始化pcb状态
+	pcbs[prio].status = PCB_ST_INIT;
 	//初始化栈
 	pcbs[prio].p_stack = stack_init(&stack[stack_size]);
 	//栈内存地址
@@ -94,14 +109,22 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	pcbs[prio].prio = prio;
 	//休眠tick数
 	pcbs[prio].sleep_tick = 0;
-	//任务入口函数
+	//进程入口函数
 	pcbs[prio].task_entry = p_entry;
 	//入口函数参数
 	pcbs[prio].task_arg = p_arg;
 	//文件使用位图
 	pcbs[prio].f_use_map = ~0x7;
 	//初始化文件描述符
-	memset(pcbs[prio].fnodes, 0, sizeof(void *) * FNODE_SIZE);
+	k_memset(pcbs[prio].fnodes, 0, sizeof(void *) * FNODE_SIZE);
+	//获取标准IO的节点指针
+	vfs_node_s *node_stdin = vfs_find_node("/dev/stdin");
+	vfs_node_s *node_stdout = vfs_find_node("/dev/stdout");
+	vfs_node_s *node_stderr = vfs_find_node("/dev/stderr");
+	//设置标准IO的设备节点
+	pcbs[prio].fnodes[0] = node_stdin;
+	pcbs[prio].fnodes[1] = node_stdout;
+	pcbs[prio].fnodes[2] = node_stderr;
 	//将空闲进程放入就绪队列
 	pcb_ready(&pcbs[prio]);
 	//返回pcb地址
@@ -110,33 +133,34 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 
 void pcb_runner(void)
 {
-	//执行任务主函数
+	//执行进程主函数
 	pcb_current->task_entry(pcb_current->task_arg);
 	//关中断
 	sche_interrupt_disable();
-	//挂起当前任务
+	//挂起当前进程
 	pcb_block(pcb_current);
-	//释放栈内存
-	free(pcb_current->p_stack_mem);
-	//清空当前运行任务
-	pcb_current = NULL;
+	//当前进程运行结束
+	pcb_current->status = PCB_ST_STOPED;
 	//取得下一个需要运行的pcb
 	pcb_next = pcb_get_highest_pcb();
+	//设置清理资源的pcb指针
+	sche_switch();
 	//开中断
-	//切换到其它需要运行的任务
-	PendSVHandler_nosave();
+	sche_interrupt_enable();
 }
 
 //将进程加入就绪队列
 void pcb_ready(pcb_s *pcb)
 {
 	pcb_ready_map |= 1 << pcb->prio;
+	pcb->status = PCB_ST_READ;
 }
 
 //将进程由就绪队列挂起
 void pcb_block(pcb_s *pcb)
 {
 	pcb_ready_map &= ~(1 << pcb->prio);
+	pcb->status = PCB_ST_BLOCK;
 }
 
 //获取优先级最高的进程索引
@@ -164,4 +188,20 @@ uint32_t pcb_get_highest_prio(void)
 pcb_s *pcb_get_highest_pcb(void)
 {
 	return &pcbs[pcb_get_highest_prio()];
+}
+
+void pcb_clear_stoped(void)
+{
+	while (1)
+	{
+		sleep_ticks(1);
+		for (uint8_t i = 0; i < PROCESS_CNT - 2; i++)
+		{
+			if (pcbs[i].status == PCB_ST_STOPED)
+			{
+				free(pcbs[i].p_stack_mem);
+				k_memset(&pcbs[i], 0, sizeof(pcb_s));
+			}
+		}
+	}
 }

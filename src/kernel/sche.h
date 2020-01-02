@@ -7,10 +7,9 @@
 #ifndef __SRC_KERNEL_SCHE_H
 #define __SRC_KERNEL_SCHE_H
 
-#include <stdio.h>
 #include <stdint.h>
 #include <pcb.h>
-
+#include <k_printf.h>
 //
 void sche_init(void);
 

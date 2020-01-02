@@ -5,6 +5,7 @@
 .global  sche_interrupt_disable                                     
 .global  sche_interrupt_enable
 .global  sche_switch_first
+.global  sche_switch_nosave
 .global  sche_switch
 .global  PendSV_Handler
 .global  PendSVHandler_nosave
@@ -47,6 +48,23 @@ sche_switch_first:
     LDR     R1, =NVIC_PENDSV_PRI
     STRB    R1, [R0]
     
+	@PSP = 0
+    MOVS    R0, #0                                             
+    MSR     PSP, R0
+	
+	@触发pendsv异常
+	LDR     R0, =NVIC_INT_CTRL                                  
+    LDR     R1, =NVIC_PENDSV_SET
+    STR     R1, [R0]
+	   
+	BX LR
+	
+	@防止编译出现警告信息
+	NOP
+
+	.global sche_switch_nosave
+    .type sche_switch_nosave, %function
+sche_switch_nosave:
 	@PSP = 0
     MOVS    R0, #0                                             
     MSR     PSP, R0

@@ -7,9 +7,10 @@
 #ifndef __SRC_LIB_SLIST_H
 #define __SRC_LIB_SLIST_H
 
-#include <stdio.h>
 #include <stdint.h>
-#include <string.h>
+#include <stdio.h>
+#include <k_printf.h>
+#include <k_string.h>
 
 //静态链表最大个数32
 #define SLIST_SIZE (32)

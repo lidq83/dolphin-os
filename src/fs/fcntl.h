@@ -9,6 +9,7 @@
 
 #include <sys/types.h>
 #include <fs.h>
+#include <k_printf.h>
 
 int open(char *path, int oflag, int mode);
 
