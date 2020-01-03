@@ -13,6 +13,8 @@
 #include <task.h>
 #include <stddev.h>
 
+int startup = 0;
+
 static void rcc_config();
 
 int main(int argc, char *argv[])
@@ -32,6 +34,8 @@ int main(int argc, char *argv[])
 	pcb_clear_process();
 
 	task_led_blink();
+
+	startup = 1;
 
 	sysclk_init();
 

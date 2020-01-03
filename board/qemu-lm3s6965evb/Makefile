@@ -56,7 +56,8 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/fs/fcntl.c \
 				$(KERNEL_PATH)/lib/slist.c \
 				$(KERNEL_PATH)/lib/k_string.c \
-				$(KERNEL_PATH)/lib/k_printf.c
+				$(KERNEL_PATH)/lib/k_printf.c \
+				$(KERNEL_PATH)/lib/k_scanf.c
 
 all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
 
@@ -76,10 +77,10 @@ $(ELF_FILE):$(SRC)
 	$(CC) $(CFLAGS)	$^ -o $@
 
 run:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
-	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -nographic
+	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -monitor stdio
 
 debug:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
-	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -nographic -s -S
+	qemu-system-arm -M lm3s6965evb --kernel $(BIN_FILE) -monitor stdio -s -S
 
 clean:
 	@rm -rvf *.o *.bin *.code *.elf *.hex *.info

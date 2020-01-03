@@ -8,6 +8,7 @@
 #include <task.h>
 #include <led.h>
 #include <k_printf.h>
+#include <k_scanf.h>
 #include <uart1.h>
 
 #define STACK_SIZE (512)
@@ -65,6 +66,19 @@ void task_1(void)
 	}
 }
 
+void task_2(void)
+{
+	int a = 0;
+	int b = 0;
+	while (1)
+	{
+		k_printf("int a = ?, b = ?\n");
+		k_scanf("%d,%d", &a, &b);
+		k_printf("a + b = %d\n", a + b);
+		k_printf("a * b = %d\n", a * b);
+	}
+}
+
 void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
@@ -75,4 +89,5 @@ void task_led_blink(void)
 	//信号量示例
 	pcb_create(PRIO_TASK_2, &task_0, NULL, STACK_SIZE);
 	pcb_create(PRIO_TASK_3, &task_1, NULL, STACK_SIZE);
+	pcb_create(PRIO_TASK_4, &task_2, NULL, STACK_SIZE);
 }

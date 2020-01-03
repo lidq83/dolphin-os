@@ -8,6 +8,35 @@
 #include <string.h>
 #include <uart1.h>
 
+buff_s rx_buff = {0};
+
+extern int startup;
+extern void stdin_post_sem(void);
+
+int buff_append(char ch)
+{
+	rx_buff.buff[rx_buff.head] = ch;
+	rx_buff.head++;
+	rx_buff.head %= BUFF_SIZE;
+	if (rx_buff.head == rx_buff.foot)
+	{
+		rx_buff.foot++;
+		rx_buff.foot %= BUFF_SIZE;
+	}
+	return 0;
+}
+
+int buff_size(void)
+{
+	int size = rx_buff.head - rx_buff.foot;
+	if (size < 0)
+	{
+		size += BUFF_SIZE;
+	}
+	return size;
+}
+
+
 void UART1_GPIO_Configuration(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
@@ -65,7 +94,11 @@ void USART1_IRQHandler(void)
 		{
 		}
 		u8 ch = USART_ReceiveData(USART1);
-		//TODO: append ch to some bufferr.
+		if (startup)
+		{
+			buff_append(ch);
+			stdin_post_sem();
+		}
 	}
 }
 

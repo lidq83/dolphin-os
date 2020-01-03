@@ -14,12 +14,19 @@
 #include <misc.h>
 #include <stdint.h>
 
-#define PRIO_HCSR04 (16)
-#define PRIO_PWMOUT (20)
+#define PRIO_TASK_0 (10)
+#define PRIO_TASK_1 (12)
+#define PRIO_TASK_2 (14)
+#define PRIO_TASK_3 (16)
+#define PRIO_TASK_4 (18)
 
-#define PRIO_TASK_0 (22)
-#define PRIO_TASK_1 (24)
-#define PRIO_TASK_2 (26)
-#define PRIO_TASK_3 (28)
+#define BUFF_SIZE (16)
+
+typedef struct buff_s
+{
+    char buff[BUFF_SIZE];
+    int head;
+    int foot;
+} buff_s;
 
 #endif

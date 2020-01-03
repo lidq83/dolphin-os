@@ -4,6 +4,8 @@
 #include <fcntl.h>
 #include <fs.h>
 #include <stddev.h>
+#include <k_printf.h>
+#include <k_scanf.h>
 #include "systick.h"
 
 #define STATCK_SIZE 1024
@@ -12,20 +14,35 @@
 //任务0入口函数
 void task0_entry(void *arg)
 {
+	uint32_t i = 0;
 	while (1)
 	{
-		sleep_ticks(1500);
-		k_printf("run process0\n");
+		sleep_ticks(100);
+		k_printf("run process0 i = %d\n", i++);
 	}
 }
 
 //任务1入口函数
 void task1_entry(void *arg)
 {
+	uint32_t i = 0;
 	while (1)
 	{
-		sleep_ticks(1500);
-		k_printf("run process1\n");
+		sleep_ticks(100);
+		k_printf("run process1 i = %d\n", i++);
+	}
+}
+
+void task3_entry(void *arg)
+{
+	int a = 0;
+	int b = 0;
+	while (1)
+	{
+		k_printf("int a = ?, b = ?\n");
+		k_scanf("%d,%d", &a, &b);
+		k_printf("a + b = %d\n", a + b);
+		k_printf("a * b = %d\n", a * b);
 	}
 }
 
@@ -108,9 +125,10 @@ int main(int argc, char **argv)
 	//创建pcb资源清理进程
 	pcb_clear_process();
 	//系统时钟初始化，在系统中断服务程序中任务调度
-	pcb_create(0, task0_entry, NULL, STATCK_SIZE);
-	pcb_create(1, task1_entry, NULL, STATCK_SIZE);
-	pcb_create(2, task2_entry, NULL, STATCK_SIZE_LONG);
+	// pcb_create(0, task0_entry, NULL, STATCK_SIZE);
+	// pcb_create(1, task1_entry, NULL, STATCK_SIZE);
+	// pcb_create(2, task2_entry, NULL, STATCK_SIZE_LONG);
+	pcb_create(3, task3_entry, NULL, STATCK_SIZE);
 
 	//打开系统时钟，启动任务切换
 	systick_init();

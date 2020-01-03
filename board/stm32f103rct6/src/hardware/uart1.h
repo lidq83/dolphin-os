@@ -10,6 +10,8 @@
 
 #include <typedef.h>
 
+int buff_size(void);
+
 void UART1_GPIO_Configuration(void);
 
 void UART1_Configuration(void);
