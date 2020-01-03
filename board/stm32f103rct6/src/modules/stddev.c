@@ -15,8 +15,13 @@ void stddev_putchar(char ch)
     {
         Uart1_PutChar('\r');
     }
+    if (ch == '\r')
+    {
+        Uart1_PutChar('\n');
+    }
 }
 
+static int flag = 0;
 void stdin_post_sem(void)
 {
     sem_post(&sem_stdin_cnt);

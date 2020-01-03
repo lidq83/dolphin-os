@@ -36,7 +36,6 @@ int buff_size(void)
 	return size;
 }
 
-
 void UART1_GPIO_Configuration(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
@@ -98,6 +97,7 @@ void USART1_IRQHandler(void)
 		{
 			buff_append(ch);
 			stdin_post_sem();
+			stddev_putchar(ch);
 		}
 	}
 }
