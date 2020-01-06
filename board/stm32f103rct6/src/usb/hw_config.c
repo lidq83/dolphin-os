@@ -4,13 +4,14 @@
 #include "hw_config.h"
 #include "usb_pwr.h"
 #include "typedef.h"
+#include "mm.h"
 
 ErrorStatus HSEStartUpStatus;
 USART_InitTypeDef USART_InitStructure;
 EXTI_InitTypeDef EXTI_InitStructure;
 
-static usb_buff_s _rx_buff = {0};
-static usb_buff_s _tx_buff = {0};
+static usb_buff_s *_rx_buff = NULL;
+static usb_buff_s *_tx_buff = NULL;
 
 static void IntToUnicode(uint32_t value, uint8_t *pbuf, uint8_t len);
 
@@ -24,6 +25,9 @@ extern LINE_CODING linecoding;
 *******************************************************************************/
 void Set_System(void)
 {
+  _rx_buff = malloc(sizeof(usb_buff_s));
+  _tx_buff = malloc(sizeof(usb_buff_s));
+
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* Enable USB_DISCONNECT GPIO clock */
@@ -180,9 +184,9 @@ uint32_t USB_RxRead(uint8_t *buffter, uint32_t buffterSize)
   uint32_t read_cnt = 0;
   for (uint32_t i = 0; i < buffterSize && i < size; i++)
   {
-    buffter[i] = _rx_buff.buff[_rx_buff.foot];
-    _rx_buff.foot++;
-    _rx_buff.foot %= USB_BUFF_SIZE;
+    buffter[i] = _rx_buff->buff[_rx_buff->foot];
+    _rx_buff->foot++;
+    _rx_buff->foot %= USB_BUFF_SIZE;
     read_cnt++;
   }
 
@@ -210,9 +214,9 @@ uint32_t USB_TxRead(uint8_t *buffter, uint32_t buffterSize)
   uint32_t read_cnt = 0;
   for (uint32_t i = 0; i < buffterSize && i < size; i++)
   {
-    buffter[i] = _tx_buff.buff[_tx_buff.foot];
-    _tx_buff.foot++;
-    _tx_buff.foot %= USB_BUFF_SIZE;
+    buffter[i] = _tx_buff->buff[_tx_buff->foot];
+    _tx_buff->foot++;
+    _tx_buff->foot %= USB_BUFF_SIZE;
     read_cnt++;
   }
 

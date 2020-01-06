@@ -2,7 +2,7 @@
 #define __BOARD_H_
 
 #ifndef MM_SIZE_HEAP
-#define MM_SIZE_HEAP (1024 * 36)
+#define MM_SIZE_HEAP (1024 * 38)
 #endif
 
 #endif
