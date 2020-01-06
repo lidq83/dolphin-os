@@ -12,6 +12,7 @@ buff_s rx_buff = {0};
 
 extern int startup;
 extern void stdin_post_sem(void);
+extern void stddev_putchar(char ch);
 
 int buff_append(char ch)
 {
