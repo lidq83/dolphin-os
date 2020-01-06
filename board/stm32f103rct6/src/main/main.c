@@ -13,6 +13,15 @@
 #include <task.h>
 #include <stddev.h>
 
+/***************************************************************************************
+ * 
+ * libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32F10x/Include/stm32f10x.h
+ * #define HSE_VALUE    ((uint32_t)16000000)
+ * #define HSI_VALUE    ((uint32_t)16000000)
+ *
+ ***************************************************************************************/
+
+
 int startup = 0;
 
 static void rcc_config();
