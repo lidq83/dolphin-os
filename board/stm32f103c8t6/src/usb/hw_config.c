@@ -161,7 +161,7 @@ void USB_Cable_Config(FunctionalState NewState)
 
 /*******************************************************************************
 * Function Name : void USB_Config(void)
-* Description   : USBÏµÍ³³õÊ¼»¯
+* Description   : USBÏµÍ³ï¿½ï¿½Ê¼ï¿½ï¿½
 *******************************************************************************/
 void USB_Config(void)
 {
@@ -176,11 +176,11 @@ void USB_Config(void)
 
 /*******************************************************************************
 * Function Name : uint32_t USB_RxRead(uint8_t *buffter, uint32_t buffterSize)
-* Description   : ´ÓUSB½ÓÊÕ»º´æÖÐ¶ÁÊý¾Ý
+* Description   : ï¿½ï¿½USBï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 uint32_t USB_RxRead(uint8_t *buffter, uint32_t buffterSize)
 {
-  uint32_t size = usb_buff_size(&_rx_buff);
+  uint32_t size = usb_buff_size(_rx_buff);
   uint32_t read_cnt = 0;
   for (uint32_t i = 0; i < buffterSize && i < size; i++)
   {
@@ -194,23 +194,23 @@ uint32_t USB_RxRead(uint8_t *buffter, uint32_t buffterSize)
 }
 /*******************************************************************************
 * Function Name : uint32_t USB_RxWrite(uint8_t *buffter, uint32_t writeLen)
-* Description   : Ð´Êý¾Ýµ½USB½ÓÊÕ»º´æÖÐ
+* Description   : Ð´ï¿½ï¿½ï¿½Ýµï¿½USBï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 uint32_t USB_RxWrite(uint8_t *buffter, uint32_t writeLen)
 {
   for (uint32_t i = 0; i < writeLen; i++)
   {
-    usb_buff_append(&_rx_buff, buffter[i]);
+    usb_buff_append(_rx_buff, buffter[i]);
   }
   return writeLen;
 }
 /*******************************************************************************
 * Function Name : uint32_t USB_TxRead(uint8_t *buffter, uint32_t buffterSize)
-* Description   : ´ÓUSB·¢ËÍ»º´æÖÐ¶ÁÊý¾Ý
+* Description   : ï¿½ï¿½USBï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 uint32_t USB_TxRead(uint8_t *buffter, uint32_t buffterSize)
 {
-  uint32_t size = usb_buff_size(&_tx_buff);
+  uint32_t size = usb_buff_size(_tx_buff);
   uint32_t read_cnt = 0;
   for (uint32_t i = 0; i < buffterSize && i < size; i++)
   {
@@ -224,13 +224,13 @@ uint32_t USB_TxRead(uint8_t *buffter, uint32_t buffterSize)
 }
 /*******************************************************************************
 * Function Name : uint32_t USB_TxWrite(uint8_t *buffter, uint32_t writeLen)
-* Description   : Ð´Êý¾Ýµ½USB·¢ËÍ»º´æÖÐ
+* Description   : Ð´ï¿½ï¿½ï¿½Ýµï¿½USBï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 uint32_t USB_TxWrite(uint8_t *buffter, uint32_t writeLen)
 {
   for (uint32_t i = 0; i < writeLen; i++)
   {
-    usb_buff_append(&_tx_buff, buffter[i]);
+    usb_buff_append(_tx_buff, buffter[i]);
   }
   return 0;
 }

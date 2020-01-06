@@ -36,7 +36,7 @@
 #define PRIO_TASK_USB (8)
 
 #define BUFF_SIZE (16)
-#define USB_BUFF_SIZE (512)
+#define USB_BUFF_SIZE (1024)
 
 typedef struct buff_s
 {

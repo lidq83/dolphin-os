@@ -12,7 +12,7 @@
 #include <uart1.h>
 #include <hw_config.h>
 
-#define STACK_SIZE (1024)
+#define STACK_SIZE (512)
 
 static void task_led(void);
 static void task_0(void);
@@ -86,16 +86,30 @@ void task_stdio(void)
 
 void task_usb(void)
 {
-	uint8_t buff[128] = {0};
+	uint8_t buff[64] = {
+		0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+	};
 	uint32_t len = 0;
 	while (1)
 	{
 		len = USB_RxRead(buff, 128);
-        if (len > 0)
-        {
-            USB_TxWrite(buff, len);
-        }
-		sleep_ticks(10);
+		if (len > 0)
+		{
+			k_printf("read data len %d\n", len);
+			USB_TxWrite(buff, len);
+			//
+		}
+		USB_TxWrite(buff, 10);
+		sleep_ticks(100);
 	}
 }
 
@@ -114,5 +128,5 @@ void task_led_blink(void)
 	pcb_create(PRIO_TASK_STDIO, &task_stdio, NULL, STACK_SIZE);
 
 	//USB虚拟串口收发示例
-	pcb_create(PRIO_TASK_USB, &task_usb, NULL, STACK_SIZE);
+	pcb_create(PRIO_TASK_USB, &task_usb, NULL, 1024);
 }
