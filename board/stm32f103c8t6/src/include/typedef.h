@@ -29,11 +29,11 @@
 #include <misc.h>
 #include <stdint.h>
 
-#define PRIO_TASK_0 (10)
-#define PRIO_TASK_1 (12)
-#define PRIO_TASK_2 (14)
-#define PRIO_TASK_3 (16)
-#define PRIO_TASK_4 (18)
+#define PRIO_TASK_LED (20)
+#define PRIO_TASK_SEM_POST (11)
+#define PRIO_TASK_SEM_WAIT (12)
+#define PRIO_TASK_STDIO (18)
+#define PRIO_TASK_USB (8)
 
 #define BUFF_SIZE (16)
 #define USB_BUFF_SIZE (512)

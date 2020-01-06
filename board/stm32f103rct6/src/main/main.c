@@ -12,6 +12,7 @@
 #include <sysclk.h>
 #include <task.h>
 #include <stddev.h>
+#include <hw_config.h>
 
 /***************************************************************************************
  * 
@@ -43,6 +44,8 @@ int main(int argc, char *argv[])
 	pcb_clear_process();
 
 	task_led_blink();
+
+	USB_Config();
 
 	startup = 1;
 

@@ -10,6 +10,7 @@
 #include <k_printf.h>
 #include <k_scanf.h>
 #include <uart1.h>
+#include <hw_config.h>
 
 #define STACK_SIZE (1024)
 
@@ -37,7 +38,7 @@ void task_led(void)
 	}
 }
 
-void task_0(void)
+void task_sem_post(void)
 {
 	uint32_t i = 0;
 	while (1)
@@ -48,7 +49,7 @@ void task_0(void)
 	}
 }
 
-void task_1(void)
+void task_sem_wait(void)
 {
 	uint32_t i = 0;
 	while (1)
@@ -66,7 +67,7 @@ void task_1(void)
 	}
 }
 
-void task_2(void)
+void task_stdio(void)
 {
 	int a = 0;
 	int b = 0;
@@ -83,15 +84,35 @@ void task_2(void)
 	}
 }
 
+void task_usb(void)
+{
+	uint8_t buff[128] = {0};
+	uint32_t len = 0;
+	while (1)
+	{
+		len = USB_RxRead(buff, 128);
+        if (len > 0)
+        {
+            USB_TxWrite(buff, len);
+        }
+		sleep_ticks(10);
+	}
+}
+
 void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
 
 	//led闪烁
-	pcb_create(PRIO_TASK_0, &task_led, NULL, STACK_SIZE);
+	pcb_create(PRIO_TASK_LED, &task_led, NULL, STACK_SIZE);
 
 	//信号量示例
-	// pcb_create(PRIO_TASK_2, &task_0, NULL, STACK_SIZE);
-	// pcb_create(PRIO_TASK_3, &task_1, NULL, STACK_SIZE);
-	pcb_create(PRIO_TASK_4, &task_2, NULL, STACK_SIZE);
+	// pcb_create(PRIO_TASK_SEM_POST, &task_sem_post, NULL, STACK_SIZE);
+	// pcb_create(PRIO_TASK_SEM_WAIT, &task_sem_wait, NULL, STACK_SIZE);
+
+	//标准输入输出示例
+	pcb_create(PRIO_TASK_STDIO, &task_stdio, NULL, STACK_SIZE);
+
+	//USB虚拟串口收发示例
+	pcb_create(PRIO_TASK_USB, &task_usb, NULL, STACK_SIZE);
 }
