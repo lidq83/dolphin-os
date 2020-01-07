@@ -17,6 +17,29 @@ static void IntToUnicode(uint32_t value, uint8_t *pbuf, uint8_t len);
 
 extern LINE_CODING linecoding;
 
+void Set_System(void);
+
+void Set_USBClock(void);
+
+void USB_Interrupts_Config(void);
+
+void USB_Init(void);
+
+/*******************************************************************************
+* Function Name : void USB_Config(void)
+* Description   : USBϵͳ��ʼ��
+*******************************************************************************/
+void USB_Config(void)
+{
+  Set_System();
+
+  Set_USBClock();
+
+  USB_Interrupts_Config();
+
+  USB_Init();
+}
+
 /*******************************************************************************
 * Function Name  : Set_System
 * Description    : Configures Main system clocks & power
@@ -30,14 +53,20 @@ void Set_System(void)
 
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  /* Enable USB_DISCONNECT GPIO clock */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT, ENABLE);
-
-  /* Configure USB pull-up pin */
-  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+  // /* Enable USB_DISCONNECT GPIO clock */
+  // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT, ENABLE);
+
+  // /* Configure USB pull-up pin */
+  // GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
+  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  // GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
 
   /* Configure the EXTI line 18 connected internally to the USB IP */
   EXTI_ClearITPendingBit(EXTI_Line18);
@@ -117,6 +146,8 @@ void Leave_LowPowerMode(void)
   {
     bDeviceState = ATTACHED;
   }
+  /*Enable SystemCoreClock*/
+  //SystemInit();
 }
 
 /*******************************************************************************
@@ -130,7 +161,7 @@ void USB_Interrupts_Config(void)
   NVIC_InitTypeDef NVIC_InitStructure;
 
   NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
@@ -147,32 +178,17 @@ void USB_Interrupts_Config(void)
 * Input          : None.
 * Return         : Status
 *******************************************************************************/
-void USB_Cable_Config(FunctionalState NewState)
-{
-  if (NewState == DISABLE)
-  {
-    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
-  }
-  else
-  {
-    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
-  }
-}
-
-/*******************************************************************************
-* Function Name : void USB_Config(void)
-* Description   : USBϵͳ��ʼ��
-*******************************************************************************/
-void USB_Config(void)
-{
-  Set_System();
-
-  Set_USBClock();
-
-  USB_Interrupts_Config();
-
-  USB_Init();
-}
+// void USB_Cable_Config(FunctionalState NewState)
+// {
+//   if (NewState == DISABLE)
+//   {
+//     GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+//   }
+//   else
+//   {
+//     GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+//   }
+// }
 
 /*******************************************************************************
 * Function Name : uint32_t USB_RxRead(uint8_t *buffter, uint32_t buffterSize)
@@ -232,7 +248,7 @@ uint32_t USB_TxWrite(uint8_t *buffter, uint32_t writeLen)
   {
     usb_buff_append(_tx_buff, buffter[i]);
   }
-  return 0;
+  return writeLen;
 }
 
 /*******************************************************************************

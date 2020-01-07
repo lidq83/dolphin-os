@@ -101,7 +101,7 @@ void task_usb(void)
 	uint32_t len = 0;
 	while (1)
 	{
-		len = USB_RxRead(buff, 128);
+		len = USB_RxRead(buff, 10);
 		if (len > 0)
 		{
 			k_printf("read data len %d\n", len);

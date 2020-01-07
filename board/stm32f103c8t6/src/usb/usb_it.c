@@ -41,11 +41,7 @@
 * Output         : None
 * Return         : None
 *******************************************************************************/
-#if defined(STM32L1XX_MD) || defined(STM32L1XX_HD)|| defined(STM32L1XX_MD_PLUS)|| defined (STM32F37X)
-void USB_LP_IRQHandler(void)
-#else
 void USB_LP_CAN1_RX0_IRQHandler(void)
-#endif
 {
   USB_Istr();
 }
@@ -58,11 +54,7 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 * Return         : None
 *******************************************************************************/
 
-#if defined(STM32L1XX_MD) || defined(STM32L1XX_HD)|| defined(STM32L1XX_MD_PLUS)
-void USB_FS_WKUP_IRQHandler(void)
-#else
 void USBWakeUp_IRQHandler(void)
-#endif
 {
   EXTI_ClearITPendingBit(EXTI_Line18);
 }

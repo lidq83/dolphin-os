@@ -100,7 +100,8 @@ void EP3_OUT_Callback(void)
   USB_RxWrite(buffter, USB_Rx_Cnt);
 
   /* Enable the receive of data on EP3 */
-  SetEPRxValid(ENDP3);
+  SetEPRxValid(ENDP3);
+
 }
 
 
