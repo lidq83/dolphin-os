@@ -34,6 +34,7 @@
 #define PRIO_TASK_SEM_WAIT (12)
 #define PRIO_TASK_STDIO (18)
 #define PRIO_TASK_USB (8)
+#define PRIO_TASK_UARTDMA (6)
 
 #define BUFF_SIZE (16)
 #define USB_BUFF_SIZE (1024)

@@ -20,10 +20,11 @@ CFLAGS		+=	-mthumb
 CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
 CFLAGS		+=	-Wno-unused-variable
-CFLAGS		+=	-mcpu=cortex-m3
+CFLAGS		+=	-mcpu=cortex-m4
+CFLAGS		+=	-mfpu=fpv4-sp-d16 -mfloat-abi=hard
 CFLAGS		+=	-I./
 CFLAGS		+=	-D"assert_param(expr)=((void)0)"
-CFLAGS		+=	-D STM32F10X_MD
+CFLAGS		+=	-D STM32F40XX
 CFLAGS		+=	-nostartfiles
 
 #------------------------------------------------------------------------#
@@ -32,19 +33,16 @@ CFLAGS		+=	-Wl,-Tstm32_flash.ld
 
 #------------------------------------------------------------------------#
 # Libraries
-STM32_LIBS	=	libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/STM32F10x_StdPeriph_Driver
-USB_LIBS	=	libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/STM32_USB-FS-Device_Driver
+STM32_LIBS	=	libs/STM32F4xx_StdPeriph_Driver
 CFLAGS		+=	-I$(STM32_LIBS)/inc
-CFLAGS		+=	-I$(USB_LIBS)/inc
-CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Include
-CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32F10x/Include
+CFLAGS		+=	-Ilibs/CMSIS/Include
+CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F4xx/Include
 
 KERNEL_PATH	=	../../src
-CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
-CFLAGS		+=	-I./src/hardware
-CFLAGS		+=	-I./src/usb
 CFLAGS		+=	-I./src/modules
+CFLAGS		+=	-I./src/hardware
+CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
@@ -54,48 +52,33 @@ CFLAGS		+=	-I$(KERNEL_PATH)/drv
 #------------------------------------------------------------------------#
 # StdPeriph
 SRC			=	$(STM32_LIBS)/src/misc.c \
-				$(STM32_LIBS)/src/stm32f10x_rcc.c \
-				$(STM32_LIBS)/src/stm32f10x_gpio.c \
-				$(STM32_LIBS)/src/stm32f10x_tim.c \
-				$(STM32_LIBS)/src/stm32f10x_usart.c \
-				$(STM32_LIBS)/src/stm32f10x_dma.c \
-				$(STM32_LIBS)/src/stm32f10x_exti.c \
-				$(STM32_LIBS)/src/stm32f10x_i2c.c
-
-#------------------------------------------------------------------------#
-# USB Device
-SRC			+=	$(USB_LIBS)/src/usb_core.c \
-				$(USB_LIBS)/src/usb_init.c \
-				$(USB_LIBS)/src/usb_int.c \
-				$(USB_LIBS)/src/usb_mem.c \
-				$(USB_LIBS)/src/usb_regs.c \
-				$(USB_LIBS)/src/usb_sil.c
+				$(STM32_LIBS)/src/stm32f4xx_rcc.c \
+				$(STM32_LIBS)/src/stm32f4xx_gpio.c \
+				$(STM32_LIBS)/src/stm32f4xx_tim.c \
+				$(STM32_LIBS)/src/stm32f4xx_usart.c \
+				$(STM32_LIBS)/src/stm32f4xx_dma.c \
+				$(STM32_LIBS)/src/stm32f4xx_exti.c \
+				$(STM32_LIBS)/src/stm32f4xx_i2c.c
 
 #------------------------------------------------------------------------#
 # Setup system clock
-SRC			+=	./src/main/system_stm32f10x.c
+SRC			+=	./src/main/system_stm32f4xx.c \
+				./src/main/stm32f4xx_it.c
 
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
-				./src/main/task.c \
-				./src/modules/stddev.c
+				./src/main/task.c
+
+#------------------------------------------------------------------------#
+# Hardware function
+SRC			+=	./src/hardware/led.c \
+				./src/hardware/sysclk.c \
+				./src/hardware/uart1.c
 
 #------------------------------------------------------------------------#
 # Modules
-SRC			+=	./src/hardware/led.c \
-				./src/hardware/sysclk.c \
-				./src/hardware/uart1dma.c
-
-#------------------------------------------------------------------------#
-# USB
-SRC			+=	./src/usb/hw_config.c \
-				./src/usb/usb_it.c \
-				./src/usb/usb_desc.c \
-				./src/usb/usb_endp.c \
-				./src/usb/usb_istr.c \
-				./src/usb/usb_prop.c \
-				./src/usb/usb_pwr.c
+SRC			+=	./src/modules/stddev.c
 
 #------------------------------------------------------------------------#
 # OS Kernel
@@ -113,9 +96,9 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/lib/k_printf.c \
 				$(KERNEL_PATH)/lib/k_scanf.c
 
-STARTUP		=	./src/main/startup_stm32f10x_md.s
+STARTUP		=	./src/main/startup_stm32f40xx.s
 
-STARTUP_OBJ	=	startup_stm32f10x_md.o
+STARTUP_OBJ	=	startup_stm32f40xx.o
 
 all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
 
