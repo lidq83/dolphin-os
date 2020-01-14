@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 	kernel_startup();
 
-	stddev_init();
+	//stddev_init();
 
 	pcb_clear_process();
 
