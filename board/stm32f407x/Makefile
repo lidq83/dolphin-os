@@ -62,12 +62,12 @@ SRC			=	$(STM32_LIBS)/src/misc.c \
 
 #------------------------------------------------------------------------#
 # Setup system clock
-SRC			+=	./src/main/system_stm32f4xx.c \
-				./src/main/stm32f4xx_it.c
+SRC			+=	./src/main/system_stm32f4xx.c
 
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
+				./src/main/startup.c \
 				./src/main/task.c
 
 #------------------------------------------------------------------------#

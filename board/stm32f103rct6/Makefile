@@ -32,18 +32,15 @@ CFLAGS		+=	-Wl,-Tstm32_flash.ld
 
 #------------------------------------------------------------------------#
 # Libraries
-STM32_LIBS	=	libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/STM32F10x_StdPeriph_Driver
-USB_LIBS	=	libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/STM32_USB-FS-Device_Driver
+STM32_LIBS	=	libs/STM32F10x_StdPeriph_Driver
 CFLAGS		+=	-I$(STM32_LIBS)/inc
-CFLAGS		+=	-I$(USB_LIBS)/inc
-CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Include
-CFLAGS		+=	-Ilibs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32F10x/Include
+CFLAGS		+=	-Ilibs/CMSIS/Include
+CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F10x/Include
 
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
 CFLAGS		+=	-I./src/hardware
-CFLAGS		+=	-I./src/usb
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
@@ -62,15 +59,6 @@ SRC			=	$(STM32_LIBS)/src/misc.c \
 				$(STM32_LIBS)/src/stm32f10x_i2c.c
 
 #------------------------------------------------------------------------#
-# USB Device
-SRC			+=	$(USB_LIBS)/src/usb_core.c \
-				$(USB_LIBS)/src/usb_init.c \
-				$(USB_LIBS)/src/usb_int.c \
-				$(USB_LIBS)/src/usb_mem.c \
-				$(USB_LIBS)/src/usb_regs.c \
-				$(USB_LIBS)/src/usb_sil.c
-
-#------------------------------------------------------------------------#
 # Setup system clock
 SRC			+=	./src/main/system_stm32f10x.c
 
@@ -85,16 +73,6 @@ SRC			+=	./src/main/main.c \
 SRC			+=	./src/hardware/led.c \
 				./src/hardware/sysclk.c \
 				./src/hardware/uart1.c
-
-#------------------------------------------------------------------------#
-# USB
-SRC			+=	./src/usb/hw_config.c \
-				./src/usb/usb_it.c \
-				./src/usb/usb_desc.c \
-				./src/usb/usb_endp.c \
-				./src/usb/usb_istr.c \
-				./src/usb/usb_prop.c \
-				./src/usb/usb_pwr.c
 
 #------------------------------------------------------------------------#
 # OS Kernel

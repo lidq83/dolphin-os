@@ -16,7 +16,7 @@ void led_init()
 	led_off(3);
 }
 
-void led_on(int led)
+void led_off(int led)
 {
 	switch (led)
 	{
@@ -38,7 +38,7 @@ void led_on(int led)
 	}
 }
 
-void led_off(int led)
+void led_on(int led)
 {
 	switch (led)
 	{

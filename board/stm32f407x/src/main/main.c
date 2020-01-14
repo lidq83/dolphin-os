@@ -7,6 +7,7 @@
 #include <typedef.h>
 #include <led.h>
 #include <sysclk.h>
+#include <startup.h>
 #include <uart1.h>
 #include <core.h>
 #include <stddev.h>
@@ -16,7 +17,7 @@ int startup = 0;
 
 int main(int argc, char *argv[])
 {
-	SystemInit();
+	rcc_config();
 
 	led_init();
 
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
 
 	kernel_startup();
 
-	//stddev_init();
+	stddev_init();
 
 	pcb_clear_process();
 

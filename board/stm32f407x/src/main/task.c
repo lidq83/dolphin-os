@@ -27,12 +27,18 @@ void task_led(void)
 		if ((led.led_val >> (i % 8)) & 0x1)
 		{
 			led_on(led.led_num);
+			led_on(1);
+			led_on(2);
+			led_on(3);
 		}
 		else
 		{
 			led_off(led.led_num);
+			led_off(1);
+			led_off(2);
+			led_off(3);
 		}
-		sleep_ticks(150);
+		sleep_ticks(125);
 	}
 }
 
@@ -94,5 +100,5 @@ void task_led_blink(void)
 	// pcb_create(PRIO_TASK_SEM_WAIT, &task_sem_wait, NULL, STACK_SIZE);
 
 	//标准输入输出示例
-	// pcb_create(PRIO_TASK_STDIO, &task_stdio, NULL, STACK_SIZE);
+	pcb_create(PRIO_TASK_STDIO, &task_stdio, NULL, STACK_SIZE);
 }

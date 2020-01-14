@@ -98,16 +98,6 @@ void USART1_IRQHandler(void)
 		temp = USART1->SR; //软件序列清除IDLE位
 		temp = USART1->DR; //先读USART_SR,然后读USART_DR
 		USART_ClearITPendingBit(USART1, USART_IT_IDLE);
-
-
-		if (i_flag++ % 2 == 0)
-		{
-			led_on(0);
-		}
-		else
-		{
-			led_off(0);
-		}
 	}
 	else if (USART_GetITStatus(USART1, USART_IT_TC) != RESET) //发送完成中断
 	{

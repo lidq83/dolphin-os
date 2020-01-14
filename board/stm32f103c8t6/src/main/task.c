@@ -10,7 +10,6 @@
 #include <k_printf.h>
 #include <k_scanf.h>
 #include <uart1.h>
-#include <hw_config.h>
 
 #define STACK_SIZE (512)
 
@@ -84,35 +83,6 @@ void task_stdio(void)
 	}
 }
 
-void task_usb(void)
-{
-	uint8_t buff[64] = {
-		0,
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-	};
-	uint32_t len = 0;
-	while (1)
-	{
-		len = USB_RxRead(buff, 10);
-		if (len > 0)
-		{
-			k_printf("read data len %d\n", len);
-			USB_TxWrite(buff, len);
-			//
-		}
-		USB_TxWrite(buff, 10);
-		sleep_ticks(100);
-	}
-}
-
 void task_uartdma(void)
 {
 	uint8_t buff[256] = {0};
@@ -151,6 +121,4 @@ void task_led_blink(void)
 
 	//USB虚拟串口收发示例
 	//pcb_create(PRIO_TASK_USB, &task_usb, NULL, 1024);
-
-	pcb_create(PRIO_TASK_UARTDMA, &task_uartdma, NULL, 2048);
 }

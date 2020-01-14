@@ -10,7 +10,6 @@
 #include <k_printf.h>
 #include <k_scanf.h>
 #include <uart1.h>
-#include <hw_config.h>
 
 #define STACK_SIZE (1024)
 
@@ -84,21 +83,6 @@ void task_stdio(void)
 	}
 }
 
-void task_usb(void)
-{
-	uint8_t buff[128] = {0};
-	uint32_t len = 0;
-	while (1)
-	{
-		len = USB_RxRead(buff, 128);
-        if (len > 0)
-        {
-            USB_TxWrite(buff, len);
-        }
-		sleep_ticks(10);
-	}
-}
-
 void task_led_blink(void)
 {
 	sem_init(&sem_rw, 0);
@@ -112,7 +96,4 @@ void task_led_blink(void)
 
 	//标准输入输出示例
 	pcb_create(PRIO_TASK_STDIO, &task_stdio, NULL, STACK_SIZE);
-
-	//USB虚拟串口收发示例
-	pcb_create(PRIO_TASK_USB, &task_usb, NULL, STACK_SIZE);
 }
