@@ -80,7 +80,9 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/lib/k_printf.c \
 				$(KERNEL_PATH)/lib/k_scanf.c
 
-all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+# all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+all:
+	@echo "Dolphin-OS do not support Cortex-A cpu yet."
 
 $(BIN_FILE):$(ELF_FILE)
 	$(OBJCOPY) -O binary $^ $@
@@ -100,13 +102,13 @@ $(STARTUP_OBJ):$(STARTUP)
 $(ELF_FILE):$(SRC)
 	$(CC) $(CFLAGS)	$^ -o $@
 
-run: $(BIN_FILE)
-	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -serial stdio
+# run: $(BIN_FILE)
+# 	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -serial stdio
 
-debug: $(BIN_FILE)
-	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -s -S
+# debug: $(BIN_FILE)
+# 	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -s -S
 
-install:
+# install:
 
 clean:
 	@rm -rvf *.o *.bin *.code *.elf *.hex *.info
