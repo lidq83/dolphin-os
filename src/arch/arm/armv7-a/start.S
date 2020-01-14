@@ -69,7 +69,6 @@ ctor_loop:
     b       ctor_loop
 ctor_end:
 
-    /* start RT-Thread Kernel */
     ldr     pc, _startup
 _startup:
     .word main

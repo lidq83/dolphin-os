@@ -1,74 +1,112 @@
-TOOL_CHAIN = arm-none-eabi-
-CC 		= ${TOOL_CHAIN}gcc
-AS 		= ${TOOL_CHAIN}as
-LD 		= ${TOOL_CHAIN}ld
-OBJCOPY = ${TOOL_CHAIN}objcopy
-OBJDUMP = $(TOOL_CHAIN)objdump
+#------------------------------------------------------------------------#
+# OS Arch
+OS_ARCH		=	arm/armv7-a
 
-CFLAGS	 =	-Wall -g -march=armv7-a -marm -msoft-float -Wall -g -gdwarf-2 -O0 -DHAVE_CCONFIG_H -DGCC_BUILD -DLINUX -DRT_USING_NEWLIB
-CFLAGS	+=	-I./
-LDFLAGS	:= 	-g -Map ygos.map
-objs 	:=  main.o  
+#------------------------------------------------------------------------#
+# Output files
+ELF_FILE	=	dolphin-os.elf
+BIN_FILE	=	dolphin-os.bin
+HEX_FILE	=	dolphin-os.hex
+INFO_FILE	=	dolphin-os.info
+CODE_FILE	=	dolphin-os.code
 
--march=armv7-a -marm -msoft-float -nostartfiles -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,system_vectors
-
-CFLAGS		+=-D GCC_BUILD
-CFLAGS		+=-I../../include
-KERNEL_DIR	=../../kernel
-IPC_DIR		=../../ipc
-
-ARCH_DIR	=../../arch/arm/armv7-a
-
-objs		+=$(ARCH_DIR)/vector_gcc.o \
-	$(ARCH_DIR)/start_gcc.o \
-	$(ARCH_DIR)/switch_gcc.o \
-	$(ARCH_DIR)/stack.o 
-
-objs		+=$(KERNEL_DIR)/core.o \
-	$(KERNEL_DIR)/idle.o \
-	$(KERNEL_DIR)/sleep.o\
-	$(IPC_DIR)/sem.o
-
-BUILD_DIR:=build
-
-object 	:=	$(BUILD_DIR)/vector_gcc.o 
-object 	+=	$(BUILD_DIR)/start_gcc.o 
-object 	+=	$(BUILD_DIR)/switch_gcc.o 
-object 	+=	$(BUILD_DIR)/stack.o 
-
-object 	+=	$(BUILD_DIR)/core.o 
-object 	+=	$(BUILD_DIR)/idle.o 
-object 	+=	$(BUILD_DIR)/sleep.o 
-object 	+=	$(BUILD_DIR)/sem.o
-
-object 	+=	$(BUILD_DIR)/main.o
+#------------------------------------------------------------------------#
+# Cross Compiler
+CC			=	arm-none-eabi-gcc
+OBJCOPY		=	arm-none-eabi-objcopy
+OBJDUMP		=	arm-none-eabi-objdump
+READELF		=	arm-none-eabi-readelf
 
 
-ygos.bin: $(objs) $(SRC) move
-	${LD} $(LDFLAGS) -T ygos.ld -o ygos.elf $(object)
-	${OBJCOPY} -O binary -S ygos.elf $@
-	${OBJDUMP} -D -m arm ygos.elf > ygos.dis
+# CFLAGS	 =	-Wall -g -march=armv7-a -marm -msoft-float 
+				#-Wall -g -gdwarf-2 -O0 -DHAVE_CCONFIG_H -DGCC_BUILD -DLINUX -DRT_USING_NEWLIB
+# CFLAGS	+=	-I./
+# LDFLAGS	:= 	-g -Map ygos.map
+# objs 	:=  main.o  
 
-run: $(objs) ygos.bin 
-	/home/yangang/work/qemu-4.2.0/yangang_arm/bin/qemu-system-arm -M mcimx6ul-evk -kernel ygos.elf -serial stdio   
+# -march=armv7-a -marm -msoft-float -nostartfiles -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,system_vectors
 
-debug: $(objs) ygos.bin
-	/home/yangang/work/qemu-4.2.0/yangang_arm/bin/qemu-system-arm -M mcimx6ul-evk -kernel ygos.elf -s -S
+#------------------------------------------------------------------------#
+# Flags
+CFLAGS		+=	-march=armv7-a
+CFLAGS		+=	-mthumb -marm -msoft-float 
+CFLAGS		+=	-Wno-incompatible-pointer-types
+CFLAGS		+=	-Wno-unused-but-set-variable
+CFLAGS		+=	-Wno-unused-variable
+CFLAGS		+=	-nostartfiles
+CFLAGS		+=	-g
+CFLAGS		+=	-I./
+CFLAGS		+=	-DHAVE_CCONFIG_H -DGCC_BUILD -DLINUX -DRT_USING_NEWLIB
 
-gdb: $(objs) ygos.bin
-	arm-none-eabi-gdb *.elf
+#------------------------------------------------------------------------#
+# Link script
+CFLAGS		+=	-Wl,-Tdolphin-os.ld
 
-%.o:%.c 
-	${CC} $(CFLAGS) -c -o $@ $<
+KERNEL_PATH	=	../../src
+CFLAGS		+=	-I./src/include
+CFLAGS		+=	-I./src/main
+CFLAGS		+=	-I./src/hardware
+CFLAGS		+=	-I./src/modules
+CFLAGS		+=	-I$(KERNEL_PATH)/kernel
+CFLAGS		+=	-I$(KERNEL_PATH)/lib
+CFLAGS		+=	-I$(KERNEL_PATH)/mm
+CFLAGS		+=	-I$(KERNEL_PATH)/fs
+CFLAGS		+=	-I$(KERNEL_PATH)/drv
 
-%.o:%.S
-	${CC} $(CFLAGS) -c -o $@ $<
+#------------------------------------------------------------------------#
+# Main function
+SRC			+=	./src/main/main.c \
+				./src/main/task.c
+
+#------------------------------------------------------------------------#
+# OS Arch
+SRC			+=	$(KERNEL_PATH)/arch/$(OS_ARCH)/stack.c \
+				$(KERNEL_PATH)/arch/$(OS_ARCH)/start.S \
+				$(KERNEL_PATH)/arch/$(OS_ARCH)/vector.S \
+				$(KERNEL_PATH)/arch/$(OS_ARCH)/switch.S
+
+#------------------------------------------------------------------------#
+# OS Kernel
+SRC			+=	$(KERNEL_PATH)/kernel/core.c \
+				$(KERNEL_PATH)/kernel/pcb.c \
+				$(KERNEL_PATH)/kernel/sche.c \
+				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/mm/mm.c \
+				$(KERNEL_PATH)/fs/vfs.c \
+				$(KERNEL_PATH)/fs/fs.c \
+				$(KERNEL_PATH)/fs/fcntl.c \
+				$(KERNEL_PATH)/lib/slist.c \
+				$(KERNEL_PATH)/lib/k_string.c \
+				$(KERNEL_PATH)/lib/k_printf.c \
+				$(KERNEL_PATH)/lib/k_scanf.c
+
+all:$(BIN_FILE) $(HEX_FILE) $(INFO_FILE) $(CODE_FILE)
+
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O binary $^ $@
+
+$(HEX_FILE):$(ELF_FILE)
+	$(OBJCOPY) -O ihex $^ $@
+
+$(INFO_FILE):$(ELF_FILE)
+	$(READELF) -a $^ > $@
+
+$(CODE_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $^ > $@
+
+$(STARTUP_OBJ):$(STARTUP)
+	$(CC) $(CFLAGS) $^ -c $(STARTUP)
+
+$(ELF_FILE):$(SRC)
+	$(CC) $(CFLAGS)	$^ -o $@
+
+run: $(BIN_FILE)
+	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -serial stdio
+
+debug: $(BIN_FILE)
+	qemu-system-arm -M mcimx6ul-evk -kernel $(ELF_FILE) -s -S
+
+install:
 
 clean:
-	rm -rf *.o *.elf *.bin *.dis *.map
-	rm build -rf
-	
-move: 
-	@rm build -rf 
-	@mkdir build
-	@mv $(objs)  build
+	@rm -rvf *.o *.bin *.code *.elf *.hex *.info
