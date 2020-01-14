@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <fs.h>
 #include <stddev.h>
-#include <uart1.h>
+#include <uart2.h>
 
 extern buff_s rx_buff;
 
@@ -11,14 +11,14 @@ sem_t sem_stdin_cnt = {0};
 
 void stddev_putchar(char ch)
 {
-    Uart1_PutChar(ch);
+    Uart2_PutChar(ch);
     if (ch == '\n')
     {
-        Uart1_PutChar('\r');
+        Uart2_PutChar('\r');
     }
     if (ch == '\r')
     {
-        Uart1_PutChar('\n');
+        Uart2_PutChar('\n');
     }
 }
 

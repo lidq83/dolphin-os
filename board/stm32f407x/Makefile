@@ -71,14 +71,13 @@ SRC			+=	./src/main/system_stm32f4xx.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
-				./src/main/startup.c \
 				./src/main/task.c
 
 #------------------------------------------------------------------------#
 # Hardware function
 SRC			+=	./src/hardware/led.c \
 				./src/hardware/sysclk.c \
-				./src/hardware/uart1.c
+				./src/hardware/uart2.c
 
 #------------------------------------------------------------------------#
 # Modules
