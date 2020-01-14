@@ -47,11 +47,11 @@ extern pcb_s *pcb_next;
 //下一个需要运行的pcb
 extern pcb_s *pcb_need_kill;
 
+//初始化进程栈
+extern void *stack_init(uint32_t *stack, void *runner);
+
 //pcb运行函数
 static void pcb_runner(void);
-
-//初始化进程栈
-void *stack_init(uint32_t *stack);
 
 //清除已经结束的进程资源
 static void pcb_clear_stoped(void);
@@ -61,34 +61,6 @@ void pcb_clear_process(void)
 {
 	//pcb资源进程优先级30
 	pcb_create(PROCESS_CNT - 2, &pcb_clear_stoped, NULL, 1024);
-}
-
-//初始化进程栈
-void *stack_init(uint32_t *stack)
-{
-	uint32_t *stk = stack;
-
-	// 初始化xPSP, PC, LR等寄存器
-	*(--stk) = (uint32_t)0x01000000uL;
-	*(--stk) = (uint32_t)pcb_runner;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-
-	//初始化R11-R4
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-	*(--stk) = (uint32_t)0x0uL;
-
-	return stk;
 }
 
 //创建一个进程
@@ -102,7 +74,7 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	//初始化pcb状态
 	pcbs[prio].status = PCB_ST_INIT;
 	//初始化栈
-	pcbs[prio].p_stack = stack_init(&stack[stack_size]);
+	pcbs[prio].p_stack = stack_init(&stack[stack_size], pcb_runner);
 	//栈内存地址
 	pcbs[prio].p_stack_mem = stack;
 	//优先级

@@ -1,4 +1,8 @@
 #------------------------------------------------------------------------#
+# OS Arch
+OS_ARCH		=	arm/armv7-m
+
+#------------------------------------------------------------------------#
 # Output files
 ELF_FILE	=	dolphin-os.elf
 BIN_FILE	=	dolphin-os.bin
@@ -28,7 +32,7 @@ CFLAGS		+=	-nostartfiles
 
 #------------------------------------------------------------------------#
 # Link script
-CFLAGS		+=	-Wl,-Tstm32_flash.ld
+CFLAGS		+=	-Wl,-Tdolphin-os.ld
 
 #------------------------------------------------------------------------#
 # Libraries
@@ -75,12 +79,16 @@ SRC			+=	./src/hardware/led.c \
 				./src/hardware/uart1.c
 
 #------------------------------------------------------------------------#
+# OS Arch
+SRC			+=	$(KERNEL_PATH)/arch/$(OS_ARCH)/stack.c \
+				$(KERNEL_PATH)/arch/$(OS_ARCH)/switch.S
+
+#------------------------------------------------------------------------#
 # OS Kernel
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
-				$(KERNEL_PATH)/kernel/switch.S \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \

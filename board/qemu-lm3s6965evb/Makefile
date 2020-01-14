@@ -7,6 +7,10 @@ INFO_FILE	=	dolphin-os.info
 CODE_FILE	=	dolphin-os.code
 
 #------------------------------------------------------------------------#
+# OS Arch
+OS_ARCH		=	arm/armv7-m
+
+#------------------------------------------------------------------------#
 # Cross Compiler
 CC			=	arm-none-eabi-gcc
 OBJCOPY		=	arm-none-eabi-objcopy
@@ -29,7 +33,7 @@ CFLAGS		+=	-nostartfiles
 
 #------------------------------------------------------------------------#
 # Link script
-CFLAGS		+=	-Wl,-Tstm32_flash.ld
+CFLAGS		+=	-Wl,-Tdolphin-os.ld
 
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src
@@ -45,11 +49,17 @@ SRC			+=	./src/main.c \
 				./src/vector.c \
 				./src/stddev.c
 
+#------------------------------------------------------------------------#
+# OS Arch
+SRC			+=	$(KERNEL_PATH)/arch/$(OS_ARCH)/stack.c \
+				$(KERNEL_PATH)/arch/$(OS_ARCH)/switch.S
+
+#------------------------------------------------------------------------#
+# OS Kernel
 SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
-				$(KERNEL_PATH)/kernel/switch.S \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \
