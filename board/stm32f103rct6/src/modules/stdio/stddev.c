@@ -3,23 +3,28 @@
 #include <fs.h>
 #include <stddev.h>
 #include <uart1.h>
+#include <virtual_uart.h>
 #include <buff_s.h>
+
+// #define STD_OUT		Uart1_PutChar
+#define STD_OUT		virtual_uart_send_char
 
 extern buff_s rx_buff;
 
 sem_t sem_stdin_cnt = {0};
 
+//UART1
 void stddev_putchar(char ch)
 {
-    Uart1_PutChar(ch);
-    if (ch == '\n')
-    {
-        Uart1_PutChar('\r');
-    }
-    if (ch == '\r')
-    {
-        Uart1_PutChar('\n');
-    }
+    STD_OUT(ch);
+    // if (ch == '\n')
+    // {
+    //     STD_OUT('\r');
+    // }
+    // if (ch == '\r')
+    // {
+    //     STD_OUT('\n');
+    // }
 }
 
 void stdin_post_sem(void)

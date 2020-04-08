@@ -50,7 +50,6 @@ CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I./src/modules/led
 CFLAGS		+=	-I./src/modules/debug
-CFLAGS		+=	-I./src/modules/virtual_uart
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
@@ -77,8 +76,7 @@ SRC			+=	./src/main/system_stm32f10x.c
 SRC			+=	./src/main/main.c \
 				./src/modules/stdio/stddev.c \
 				./src/modules/led/led_task.c \
-				./src/modules/debug/debug_task.c \
-				./src/modules/virtual_uart/virtual_uart_task.c
+				./src/modules/debug/debug_task.c
 
 #------------------------------------------------------------------------#
 # Libs

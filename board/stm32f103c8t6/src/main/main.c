@@ -14,7 +14,6 @@
 #include <stddev.h>
 #include <led_task.h>
 #include <debug_task.h>
-#include <virtual_uart_task.h>
 
 /***************************************************************************************
  * 
@@ -49,8 +48,6 @@ int main(int argc, char *argv[])
 	led_task();
 
 	debug_task();
-
-	virtual_uart_task();
 
 	startup = 1;
 
