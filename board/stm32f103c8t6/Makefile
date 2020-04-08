@@ -49,6 +49,7 @@ CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I./src/modules/led
+CFLAGS		+=	-I./src/modules/debug
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
@@ -73,8 +74,9 @@ SRC			+=	./src/main/system_stm32f10x.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
+				./src/modules/stdio/stddev.c \
 				./src/modules/led/led_task.c \
-				./src/modules/stdio/stddev.c
+				./src/modules/debug/debug_task.c
 
 #------------------------------------------------------------------------#
 # Modules

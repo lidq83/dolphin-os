@@ -21,7 +21,6 @@ void stddev_putchar(char ch)
     }
 }
 
-static int flag = 0;
 void stdin_post_sem(void)
 {
     sem_post(&sem_stdin_cnt);

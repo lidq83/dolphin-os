@@ -12,6 +12,7 @@
 #include <sem.h>
 #include <led.h>
 #include <mm.h>
+#include <pcb.h>
 #include <uart1.h>
 
 void led_task(void);
