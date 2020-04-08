@@ -11,6 +11,8 @@
 #define NULL (void *)(0)
 #endif
 
+void number_to_str(char *buff, int number, int hex);
+
 int k_puts(char *str);
 
 int k_printf(char *fmt, ...);

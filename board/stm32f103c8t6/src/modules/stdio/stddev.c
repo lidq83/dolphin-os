@@ -3,6 +3,7 @@
 #include <fs.h>
 #include <stddev.h>
 #include <uart1.h>
+#include <buff_s.h>
 
 extern buff_s rx_buff;
 
@@ -33,12 +34,12 @@ int stdin_read(struct file *f, void *buf, size_t size)
     for (size_t i = 0; i < size; i++)
     {
         sem_wait(&sem_stdin_cnt);
-        int b_size = buff_size();
+        int b_size = buff_size(&rx_buff);
         if (b_size > 0)
         {
             p[i] = rx_buff.buff[rx_buff.foot];
             rx_buff.foot++;
-            rx_buff.foot %= BUFF_SIZE;
+            rx_buff.foot %= BUFF_SIZE_UART;
             r_size++;
         }
     }

@@ -7,35 +7,14 @@
 
 #include <string.h>
 #include <uart1.h>
+#include <stddev.h>
+#include <buff_s.h>
 
 buff_s rx_buff = {0};
 
 extern int startup;
 extern void stdin_post_sem(void);
 extern void stddev_putchar(char ch);
-
-int buff_append(char ch)
-{
-	rx_buff.buff[rx_buff.head] = ch;
-	rx_buff.head++;
-	rx_buff.head %= BUFF_SIZE;
-	if (rx_buff.head == rx_buff.foot)
-	{
-		rx_buff.foot++;
-		rx_buff.foot %= BUFF_SIZE;
-	}
-	return 0;
-}
-
-int buff_size(void)
-{
-	int size = rx_buff.head - rx_buff.foot;
-	if (size < 0)
-	{
-		size += BUFF_SIZE;
-	}
-	return size;
-}
 
 void UART1_GPIO_Configuration(void)
 {
@@ -69,18 +48,18 @@ void UART1_Configuration(void)
 	NVIC_EnableIRQ(USART1_IRQn);
 }
 
-u8 Uart1_PutChar(u8 ch)
+uint8_t Uart1_PutChar(uint8_t ch)
 {
-	USART_SendData(USART1, (u8)ch);
+	USART_SendData(USART1, (uint8_t)ch);
 	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	{
 	}
 	return ch;
 }
 
-void Uart1_PutString(u8 *buf, u8 len)
+void Uart1_PutString(uint8_t *buf, uint8_t len)
 {
-	for (u8 i = 0; i < len; i++)
+	for (uint8_t i = 0; i < len; i++)
 	{
 		Uart1_PutChar(*buf++);
 	}
@@ -93,10 +72,10 @@ void USART1_IRQHandler(void)
 		while ((USART1->SR & USART_SR_RXNE) == 0)
 		{
 		}
-		u8 ch = USART_ReceiveData(USART1);
+		uint8_t ch = USART_ReceiveData(USART1);
 		if (startup)
 		{
-			buff_append(ch);
+			buff_append(&rx_buff, ch);
 			stdin_post_sem();
 			stddev_putchar(ch);
 		}

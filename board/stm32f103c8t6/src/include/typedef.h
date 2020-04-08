@@ -29,13 +29,4 @@
 #include <misc.h>
 #include <stdint.h>
 
-#define BUFF_SIZE (16)
-
-typedef struct buff_s
-{
-    char buff[BUFF_SIZE];
-    int head;
-    int foot;
-} buff_s;
-
 #endif

@@ -10,15 +10,13 @@
 
 #include <typedef.h>
 
-int buff_size(void);
-
 void UART1_GPIO_Configuration(void);
 
 void UART1_Configuration(void);
 
-u8 Uart1_PutChar(u8 ch);
+uint8_t Uart1_PutChar(uint8_t ch);
 
-void Uart1_PutString(u8* buf, u8 len);
+void Uart1_PutString(uint8_t* buf, uint8_t len);
 
 void USART1_IRQHandler(void);
 

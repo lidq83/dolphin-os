@@ -38,18 +38,19 @@ CFLAGS		+=	-Wl,-Tdolphin-os.ld
 # Libraries
 STM32_LIBS	=	libs/STM32F10x_StdPeriph_Driver
 CFLAGS		+=	-I$(STM32_LIBS)/inc
-CFLAGS		+=	-I$(USB_LIBS)/inc
 CFLAGS		+=	-Ilibs/CMSIS/Include
 CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F10x/Include
 
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
+CFLAGS		+=	-I./src/libs
 CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I./src/modules/led
 CFLAGS		+=	-I./src/modules/debug
+CFLAGS		+=	-I./src/modules/virtual_uart
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
@@ -76,13 +77,19 @@ SRC			+=	./src/main/system_stm32f10x.c
 SRC			+=	./src/main/main.c \
 				./src/modules/stdio/stddev.c \
 				./src/modules/led/led_task.c \
-				./src/modules/debug/debug_task.c
+				./src/modules/debug/debug_task.c \
+				./src/modules/virtual_uart/virtual_uart_task.c
+
+#------------------------------------------------------------------------#
+# Libs
+SRC			+=	./src/libs/buff_s.c
 
 #------------------------------------------------------------------------#
 # Modules
 SRC			+=	./src/drv/led.c \
 				./src/drv/sysclk.c \
-				./src/drv/uart1.c
+				./src/drv/uart1.c \
+				./src/drv/virtual_uart.c
 
 #------------------------------------------------------------------------#
 # OS Arch

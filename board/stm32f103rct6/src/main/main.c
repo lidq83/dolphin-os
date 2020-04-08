@@ -8,10 +8,13 @@
 #include <typedef.h>
 #include <led.h>
 #include <uart1.h>
+#include <virtual_uart.h>
 #include <core.h>
 #include <sysclk.h>
-#include <led_task.h>
 #include <stddev.h>
+#include <led_task.h>
+#include <debug_task.h>
+#include <virtual_uart_task.h>
 
 /***************************************************************************************
  * 
@@ -20,7 +23,6 @@
  * #define HSI_VALUE    ((uint32_t)16000000)
  *
  ***************************************************************************************/
-
 
 int startup = 0;
 
@@ -36,6 +38,8 @@ int main(int argc, char *argv[])
 
 	uart1_init();
 
+	virtual_uart_init();
+
 	kernel_startup();
 
 	stddev_init();
@@ -43,6 +47,10 @@ int main(int argc, char *argv[])
 	pcb_clear_process();
 
 	led_task();
+
+	debug_task();
+
+	virtual_uart_task();
 
 	startup = 1;
 

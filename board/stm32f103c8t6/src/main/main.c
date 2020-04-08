@@ -7,11 +7,14 @@
 
 #include <typedef.h>
 #include <led.h>
+#include <uart1.h>
+#include <virtual_uart.h>
 #include <core.h>
 #include <sysclk.h>
 #include <stddev.h>
 #include <led_task.h>
 #include <debug_task.h>
+#include <virtual_uart_task.h>
 
 /***************************************************************************************
  * 
@@ -35,6 +38,8 @@ int main(int argc, char *argv[])
 
 	uart1_init();
 
+	virtual_uart_init();
+
 	kernel_startup();
 
 	stddev_init();
@@ -45,6 +50,8 @@ int main(int argc, char *argv[])
 
 	debug_task();
 
+	virtual_uart_task();
+
 	startup = 1;
 
 	sysclk_init();
@@ -53,7 +60,6 @@ int main(int argc, char *argv[])
 	{
 	}
 }
-
 
 void rcc_config()
 {

@@ -4,16 +4,15 @@
  *  Created on: December 23, 2019
  *      Author: lidq
  */
-#ifndef __SRC_DEBUG_TASK_H
-#define __SRC_DEBUG_TASK_H
+#ifndef __SRC_VIRTUAL_UART_TASK_H
+#define __SRC_VIRTUAL_UART_TASK_H
 
 #include <typedef.h>
 #include <sem.h>
 #include <mm.h>
 #include <sche.h>
-#include <k_printf.h>
-#include <k_scanf.h>
+#include <virtual_uart.h>
 
-void debug_task(void);
+void virtual_uart_task(void);
 
 #endif
