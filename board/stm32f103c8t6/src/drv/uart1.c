@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <uart1.h>
+#include <stddev.h>
 
 buff_s rx_buff = {0};
 

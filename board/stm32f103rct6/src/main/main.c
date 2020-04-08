@@ -10,7 +10,7 @@
 #include <uart1.h>
 #include <core.h>
 #include <sysclk.h>
-#include <task.h>
+#include <led_task.h>
 #include <stddev.h>
 
 /***************************************************************************************
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 	pcb_clear_process();
 
-	task_led_blink();
+	led_task();
 
 	startup = 1;
 

@@ -44,8 +44,10 @@ CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F10x/Include
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
-CFLAGS		+=	-I./src/hardware
+CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/modules
+CFLAGS		+=	-I./src/modules/led
+CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
@@ -69,14 +71,14 @@ SRC			+=	./src/main/system_stm32f10x.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
-				./src/main/task.c \
-				./src/modules/stddev.c
+				./src/modules/stdio/stddev.c \
+				./src/modules/led/led_task.c
 
 #------------------------------------------------------------------------#
 # Modules
-SRC			+=	./src/hardware/led.c \
-				./src/hardware/sysclk.c \
-				./src/hardware/uart1.c
+SRC			+=	./src/drv/led.c \
+				./src/drv/sysclk.c \
+				./src/drv/uart1.c
 
 #------------------------------------------------------------------------#
 # OS Arch
