@@ -23,8 +23,6 @@
  *
  ***************************************************************************************/
 
-int startup = 0;
-
 static void rcc_config();
 
 int main(int argc, char *argv[])
@@ -48,8 +46,6 @@ int main(int argc, char *argv[])
 	led_task();
 
 	debug_task();
-
-	startup = 1;
 
 	sysclk_init();
 

@@ -12,10 +12,6 @@
 
 buff_s rx_buff = {0};
 
-extern int startup;
-extern void stdin_post_sem(void);
-extern void stddev_putchar(char ch);
-
 void UART1_GPIO_Configuration(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
@@ -37,7 +33,7 @@ void UART1_Configuration(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 
 	USART_Cmd(USART1, ENABLE);
-	usart1_init_struct.USART_BaudRate = 115200;
+	usart1_init_struct.USART_BaudRate = 921600;
 	usart1_init_struct.USART_WordLength = USART_WordLength_8b;
 	usart1_init_struct.USART_StopBits = USART_StopBits_1;
 	usart1_init_struct.USART_Parity = USART_Parity_No;
@@ -72,13 +68,9 @@ void USART1_IRQHandler(void)
 		while ((USART1->SR & USART_SR_RXNE) == 0)
 		{
 		}
+		
 		uint8_t ch = USART_ReceiveData(USART1);
-		if (startup)
-		{
-			buff_append(&rx_buff, ch);
-			stdin_post_sem();
-			stddev_putchar(ch);
-		}
+		buff_append(&rx_buff, ch);
 	}
 }
 
