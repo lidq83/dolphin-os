@@ -8,6 +8,9 @@
 #include <typedef.h>
 #include <led.h>
 #include <uart1.h>
+#include <uart2.h>
+#include <ttyS1.h>
+#include <ttyS2.h>
 #include <virtual_uart.h>
 #include <core.h>
 #include <sysclk.h>
@@ -33,15 +36,18 @@ int main(int argc, char *argv[])
 
 	led_init();
 
-	uart1_init();
-
-	virtual_uart_init();
-
 	kernel_startup();
 
 	stddev_init();
 
 	pcb_clear_process();
+
+	uart1_init();
+	uart2_init();
+	ttyS1_init();
+	ttyS2_init();
+	
+	virtual_uart_init();
 
 	led_task();
 

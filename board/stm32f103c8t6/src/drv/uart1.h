@@ -9,17 +9,12 @@
 #define __SRC_MODULES_UART1_H_
 
 #include <typedef.h>
+#include <buff_s.h>
 
-void UART1_GPIO_Configuration(void);
-
-void UART1_Configuration(void);
-
-uint8_t Uart1_PutChar(uint8_t ch);
-
-void Uart1_PutString(uint8_t* buf, uint8_t len);
-
-void USART1_IRQHandler(void);
+#define BUATRATE_UART1 (115200)
 
 void uart1_init();
+
+void uart1_send(void *buff, size_t size);
 
 #endif /* SRC_UART_H_ */
