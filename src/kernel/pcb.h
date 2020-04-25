@@ -58,6 +58,9 @@ void pcb_ready(pcb_s *pcb);
 //将进程由就绪队列挂起
 void pcb_block(pcb_s *pcb);
 
+//将进程结束
+void pcb_kill(pcb_s *pcb);
+
 //获取优先级最高的进程索引
 uint32_t pcb_get_highest_prio(void);
 

@@ -135,6 +135,19 @@ void pcb_block(pcb_s *pcb)
 	pcb->status = PCB_ST_BLOCK;
 }
 
+//将进程结束
+void pcb_kill(pcb_s *pcb)
+{
+	//关中断
+	sche_interrupt_disable();
+	//挂起进程
+	pcb_block(pcb);
+	//进程结束
+	pcb->status = PCB_ST_STOPED;
+	//开中断
+	sche_interrupt_enable();
+}
+
 //获取优先级最高的进程索引
 uint32_t pcb_get_highest_prio(void)
 {

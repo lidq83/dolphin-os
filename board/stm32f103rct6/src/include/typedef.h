@@ -29,4 +29,7 @@
 #include <misc.h>
 #include <stdint.h>
 
+#include <board.h>
+#include <mm.h>
+
 #endif

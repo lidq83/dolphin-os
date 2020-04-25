@@ -46,6 +46,7 @@ CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
 CFLAGS		+=	-I./src/libs
 CFLAGS		+=	-I./src/drv
+CFLAGS		+=	-I./src/dev
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I./src/modules/led
@@ -74,6 +75,7 @@ SRC			+=	./src/main/system_stm32f10x.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
+				./src/libs/buff_s.c \
 				./src/modules/stdio/stddev.c \
 				./src/modules/led/led_task.c \
 				./src/modules/debug/debug_task.c
@@ -87,7 +89,13 @@ SRC			+=	./src/libs/buff_s.c
 SRC			+=	./src/drv/led.c \
 				./src/drv/sysclk.c \
 				./src/drv/uart1.c \
+				./src/drv/uart2.c \
 				./src/drv/virtual_uart.c
+
+#------------------------------------------------------------------------#
+# dev
+SRC			+=	./src/dev/ttyS1.c \
+				./src/dev/ttyS2.c
 
 #------------------------------------------------------------------------#
 # OS Arch
