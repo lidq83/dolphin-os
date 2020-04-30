@@ -16,6 +16,7 @@
 #include <std.h>
 #include <debug_task.h>
 #include <led_task.h>
+#include <virtual_uart.h>
 
 /***************************************************************************************
  * 
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
 
 	serial1_init();
 	serial2_init();
+	virtual_uart_init();
 
 	kernel_startup();
 

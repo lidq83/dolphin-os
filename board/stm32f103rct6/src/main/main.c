@@ -7,15 +7,15 @@
 
 #include <typedef.h>
 #include <led.h>
-#include <uart1.h>
-#include <uart2.h>
+#include <serial1.h>
+#include <serial2.h>
 #include <core.h>
 #include <sysclk.h>
-#include <stddev.h>
+#include <std.h>
 #include <virtual_uart.h>
 #include <ttyS1.h>
 #include <ttyS2.h>
-
+#include <virtual_uart.h>
 #include <led_task.h>
 #include <debug_task.h>
 
@@ -27,8 +27,6 @@
  *
  ***************************************************************************************/
 
-int startup = 0;
-
 static void rcc_config();
 
 int main(int argc, char *argv[])
@@ -39,27 +37,20 @@ int main(int argc, char *argv[])
 
 	led_init();
 
+	serial1_init();
+	serial2_init();
+	virtual_uart_init();
+
 	kernel_startup();
 
-	//stddev_init();
-
-	pcb_clear_process();
-
-	uart1_init();
-	uart2_init();
+	std_init();
 	ttyS1_init();
 	ttyS2_init();
 
-	//virtual_uart_init();
-
 	led_task();
-
 	debug_task();
 
-	startup = 1;
-
 	sysclk_init();
-
 	while (1)
 	{
 	}

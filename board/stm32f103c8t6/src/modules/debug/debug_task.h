@@ -9,8 +9,7 @@
 
 #include <typedef.h>
 #include <sche.h>
-#include <ttyS1.h>
-#include <ttyS2.h>
+#include <k_printf.h>
 
 void debug_task(void);
 
