@@ -7,6 +7,7 @@
 
 #include <debug_task.h>
 #include <serial.h>
+#include <serial2.h>
 
 void debug_pthread(void)
 {
@@ -14,6 +15,10 @@ void debug_pthread(void)
 	while (1)
 	{
 		while (serial_read(&ch) > 0)
+		{
+			serial2_write(ch);
+		}
+		while (serial2_read(&ch) > 0)
 		{
 			serial_write(ch);
 		}

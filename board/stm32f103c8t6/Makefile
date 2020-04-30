@@ -86,7 +86,8 @@ SRC			+=	./src/libs/buff_s.c
 # Drv
 SRC			+=	./src/drv/led.c \
 				./src/drv/sysclk.c \
-				./src/drv/serial.c
+				./src/drv/serial.c \
+				./src/drv/serial2.c
 
 #------------------------------------------------------------------------#
 # OS Arch

@@ -10,6 +10,7 @@
 #include <core.h>
 #include <sysclk.h>
 #include <serial.h>
+#include <serial2.h>
 #include <debug_task.h>
 #include <led_task.h>
 
@@ -56,6 +57,40 @@ void USART1_Configuration(u32 BaudRate)
 	USART_Cmd(USART1, ENABLE);
 }
 
+void USART2_Configuration(u32 BaudRate)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	USART_InitStructure.USART_BaudRate = BaudRate;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART2->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+	USART_Init(USART2, &USART_InitStructure);
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+	USART_Cmd(USART2, ENABLE);
+}
+
 int main(int argc, char *argv[])
 {
 	SystemInit();
@@ -65,7 +100,9 @@ int main(int argc, char *argv[])
 	led_init();
 
 	USART1_Configuration(115200);
+	USART2_Configuration(115200);
 	serial_init();
+	serial2_init();
 
 	kernel_startup();
 
@@ -77,7 +114,6 @@ int main(int argc, char *argv[])
 
 	sysclk_init();
 
-	uint8_t ch = 0;
 	while (1)
 	{
 		
