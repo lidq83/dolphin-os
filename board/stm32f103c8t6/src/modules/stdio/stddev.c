@@ -2,7 +2,6 @@
 #include <fcntl.h>
 #include <fs.h>
 #include <stddev.h>
-#include <uart1.h>
 #include <virtual_uart.h>
 #include <buff_s.h>
 

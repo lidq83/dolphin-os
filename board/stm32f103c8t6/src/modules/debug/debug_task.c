@@ -6,7 +6,7 @@
  */
 
 #include <debug_task.h>
-#include <serial.h>
+#include <serial1.h>
 #include <serial2.h>
 
 void debug_pthread(void)
@@ -14,14 +14,15 @@ void debug_pthread(void)
 	uint8_t ch = 0;
 	while (1)
 	{
-		while (serial_read(&ch) > 0)
+		while (serial1_read(&ch) > 0)
 		{
 			serial2_write(ch);
 		}
 		while (serial2_read(&ch) > 0)
 		{
-			serial_write(ch);
+			serial1_write(ch);
 		}
+		
 		sleep_ticks(1);
 	}
 }

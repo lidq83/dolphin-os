@@ -1,4 +1,3 @@
-#include <typedef.h>
 #include <serial2.h>
 
 #define RX_RING_BUFFER2 (RX_BUFFER2_SIZE + 1) // +1 added by MS
@@ -11,6 +10,8 @@ volatile uint8_t serial2_rx_buffer_tail = 0;
 uint8_t serial2_tx_buffer[TX_RING_BUFFER2];
 uint8_t serial2_tx_buffer_head = 0;
 volatile uint8_t serial2_tx_buffer_tail = 0;
+
+static void storeHandleDataIn(uint8_t data);
 
 // Returns the number of bytes available in the RX serial buffer.
 uint8_t serial2_get_rx_buffer_available()
@@ -36,8 +37,38 @@ uint8_t serial2_get_rx_buffer_count()
 	return (RX_BUFFER2_SIZE - (rtail - serial2_rx_buffer_head));
 }
 
-void serial2_init()
+void serial2_init(void)
 {
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	USART_InitStructure.USART_BaudRate = SERIAL_BAUTRATE;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART2->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+	USART_Init(USART2, &USART_InitStructure);
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+	USART_Cmd(USART2, ENABLE);
 }
 
 // Writes one byte to the TX serial buffer. Called by main program.
@@ -89,7 +120,7 @@ int serial2_read(uint8_t *ch)
 }
 
 // store one received byte into Rx buffer or handle if it is a realtime command
-void storeHandleDataIn2(uint8_t data)
+void storeHandleDataIn(uint8_t data)
 {
 	uint8_t next_head;
 	// Pick off realtime command characters directly from the serial stream. These characters are
@@ -128,7 +159,7 @@ void USART2_IRQHandler(void)
 	if (USART2->SR & USART_FLAG_RXNE) // changed by MS : it was IIR & USART_FLAG_RXNE
 	{								  // read interrupt
 		data = USART2->DR & 0x1FF;
-		storeHandleDataIn2(data);
+		storeHandleDataIn(data);
 		//USART2->SR = ~USART_FLAG_RXNE;	          // clear interrupt ; changed by MS, it is normally cleared automatically by reading the DR register
 	}
 
@@ -137,7 +168,7 @@ void USART2_IRQHandler(void)
 		// changed by MS : it was IIR & USART_FLAG_TXE
 		tail = serial2_tx_buffer_tail;
 		if (tail != serial2_tx_buffer_head)
-		{										 // if there is at least one byte to send; take it from the buffer and
+		{										  // if there is at least one byte to send; take it from the buffer and
 			USART2->DR = serial2_tx_buffer[tail]; // this clear the interrupt.
 			tail++;
 			if (tail >= TX_RING_BUFFER2)

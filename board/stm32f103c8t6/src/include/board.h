@@ -5,4 +5,8 @@
 #define MM_SIZE_HEAP (1024 * 10)
 #endif
 
+#ifndef SERIAL_BAUTRATE
+#define SERIAL_BAUTRATE (115200)
+#endif
+
 #endif

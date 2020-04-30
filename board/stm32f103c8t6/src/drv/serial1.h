@@ -19,35 +19,34 @@
   along with Grbl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef serial_h
-#define serial_h
+#ifndef __SERIAL1_H
+#define __SERIAL1_H
 
-#define RX_BUFFER_SIZE 1024
-#define TX_BUFFER_SIZE 254
+#include <typedef.h>
 
-void serial_init();
+#define RX_BUFFER1_SIZE 1024
+#define TX_BUFFER1_SIZE 254
+
+void serial1_init(void);
 
 // Writes one byte to the TX serial buffer. Called by main program.
-void serial_write(uint8_t data);
+void serial1_write(uint8_t data);
 
 // Fetches the first byte in the serial read buffer. Called by main program.
-int serial_read(uint8_t *ch);
+int serial1_read(uint8_t *ch);
 
 // Reset and empty data in read buffer. Used by e-stop and reset.
-void serial_reset_read_buffer();
+void serial1_reset_read_buffer();
 
 // Returns the number of bytes available in the RX serial buffer.
-uint8_t serial_get_rx_buffer_available();
+uint8_t serial1_get_rx_buffer_available();
 
 // Returns the number of bytes used in the RX serial buffer.
 // NOTE: Deprecated. Not used unless classic status reports are enabled in config.h.
-uint8_t serial_get_rx_buffer_count();
+uint8_t serial1_get_rx_buffer_count();
 
 // Returns the number of bytes used in the TX serial buffer.
 // NOTE: Not used except for debugging and ensuring no TX bottlenecks.
-uint8_t serial_get_tx_buffer_count();
-
-// store one received byte into Rx buffer and handle if it is a realtime command
-void storeHandleDataIn(uint8_t data);
+uint8_t serial1_get_tx_buffer_count();
 
 #endif

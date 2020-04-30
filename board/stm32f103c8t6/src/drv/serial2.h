@@ -19,13 +19,15 @@
   along with Grbl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef serial2_h
-#define serial2_h
+#ifndef __SERIAL2_H
+#define __SERIAL2_H
+
+#include <typedef.h>
 
 #define RX_BUFFER2_SIZE 1024
 #define TX_BUFFER2_SIZE 254
 
-void serial2_init();
+void serial2_init(void);
 
 // Writes one byte to the TX serial buffer. Called by main program.
 void serial2_write(uint8_t data);
@@ -46,8 +48,5 @@ uint8_t serial2_get_rx_buffer_count();
 // Returns the number of bytes used in the TX serial buffer.
 // NOTE: Not used except for debugging and ensuring no TX bottlenecks.
 uint8_t serial2_get_tx_buffer_count();
-
-// store one received byte into Rx buffer and handle if it is a realtime command
-void storeHandleDataIn2(uint8_t data);
 
 #endif
