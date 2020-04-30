@@ -9,10 +9,12 @@
 #include <uart1.h>
 #include <sem.h>
 
-static uint8_t *u1_r_buff = NULL;
-static uint8_t *u1_t_buff = NULL;
-buff_s *u1_rx_buff = NULL;
-
+uint8_t u1_r_buff[64];
+uint8_t u1_t_buff[64];
+buff_s u1_rx_buff;
+int u1_rx_len = 0;
+int u1_is_send = 0;
+uint32_t rx_cnt = 0;
 void UART1_GPIO_Configuration(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
@@ -44,8 +46,8 @@ void UART1_Configuration(void)
 
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
@@ -64,7 +66,7 @@ void _uart1_dma_configuration()
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USART1->DR);		// 初始化外设地址，相当于“哪家快递”
 	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)u1_r_buff;				// 内存地址，相当于几号柜
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;						//外设作为数据来源，即为收快递
-	DMA_InitStructure.DMA_BufferSize = BUFF_SIZE_UART;						// 缓存容量，即柜子大小
+	DMA_InitStructure.DMA_BufferSize = 64;									// 缓存容量，即柜子大小
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;		// 外设地址不递增，即柜子对应的快递不变
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;					// 内存递增
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte; //外设字节宽度，即快递运输快件大小度量（按重量算，还是按体积算）
@@ -94,44 +96,34 @@ void _uart1_dma_configuration()
 	USART_ITConfig(USART1, USART_IT_TC, ENABLE);					 // 使能串口发送完成中断
 	USART_DMACmd(USART1, USART_DMAReq_Tx | USART_DMAReq_Rx, ENABLE); // 使能DMA串口发送和接受请求
 }
-
+// uint8_t ia = 0;
 void USART1_IRQHandler(void)
 {
-	uint32_t temp = 0;
+	// uint32_t temp = 0;
 	if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET) //空闲中断
 	{
-		DMA_Cmd(DMA1_Channel5, DISABLE);
-
-		temp = USART1->SR; //软件序列清除IDLE位
-		temp = USART1->DR; //先读USART_SR,然后读USART_DR
-		temp = temp;
-		int len = BUFF_SIZE_UART - DMA1_Channel5->CNDTR;
-		for (int i = 0; i < len; i++)
-		{
-			buff_append(u1_rx_buff, u1_r_buff[i]);
-		}
-		DMA1_Channel5->CNDTR = BUFF_SIZE_UART;
-
-		/* 此处应该在处理完数据再打开，如在 DataPack_Process() 打开*/
-		DMA_Cmd(DMA1_Channel5, ENABLE);
+		uart1_recv(NULL, NULL);
 
 		USART_ClearITPendingBit(USART1, USART_IT_IDLE);
 	}
-	else if (USART_GetITStatus(USART1, USART_IT_TC) != RESET) //发送完成中断
+	// else
+	if (USART_GetITStatus(USART1, USART_IT_TC) != RESET) //发送完成中断
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_TC);
 		DMA_Cmd(DMA1_Channel4, DISABLE);
+		u1_is_send = 0;
 	}
 }
 
 void uart1_init()
 {
-	u1_r_buff = malloc(BUFF_SIZE_UART);
-	u1_t_buff = malloc(BUFF_SIZE_UART);
-	u1_rx_buff = malloc(sizeof(buff_s));
+	// u1_r_buff = malloc(64);
+	// u1_t_buff = malloc(64);
+	// u1_rx_buff = malloc(sizeof(buff_s));
 
-	memset(u1_r_buff, 0, BUFF_SIZE_UART);
-	memset(u1_rx_buff, 0, sizeof(buff_s));
+	// memset(u1_r_buff, 0, 64);
+	// memset(u1_t_buff, 0, 64);
+	// memset(u1_rx_buff, 0, sizeof(buff_s));
 
 	UART1_GPIO_Configuration();
 	UART1_Configuration();
@@ -142,7 +134,28 @@ void uart1_send(void *buff, size_t size)
 {
 	memcpy(u1_t_buff, buff, size);
 	DMA_Cmd(DMA1_Channel4, DISABLE);
-	DMA1_Channel4->CNDTR = size;		  //发送数据大小
+	DMA1_Channel4->CNDTR = size;			   //发送数据大小
 	DMA1_Channel4->CMAR = (uint32_t)u1_t_buff; //发送数据地址
 	DMA_Cmd(DMA1_Channel4, ENABLE);
+}
+
+void uart1_recv(void *buff, int *size)
+{
+	uint32_t temp = 0;
+
+	DMA_Cmd(DMA1_Channel5, DISABLE);
+	temp = USART1->SR; //软件序列清除IDLE位
+	temp = USART1->DR; //先读USART_SR,然后读USART_DR
+	temp = temp;
+	u1_rx_len = 64 - DMA_GetCurrDataCounter(DMA1_Channel5);
+	// for (int i = 0; i < u1_rx_len; i++)
+	// {
+	// 	buff_append(&u1_rx_buff, u1_r_buff[i]);
+	// }
+	//memcpy(buff, u1_r_buff, u1_rx_len);
+	rx_cnt += u1_rx_len;
+	//*size = u1_rx_len;
+	DMA1_Channel5->CNDTR = 64;
+	/* 此处应该在处理完数据再打开，如在 DataPack_Process() 打开*/
+	DMA_Cmd(DMA1_Channel5, ENABLE);
 }

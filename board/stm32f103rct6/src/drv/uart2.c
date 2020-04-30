@@ -63,7 +63,7 @@ void _uart2_dma_configuration()
 	/* DMA1 Channel5 (triggered by USART1 Rx event) Config */
 	DMA_DeInit(DMA1_Channel6);
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USART2->DR);		// 初始化外设地址，相当于“哪家快递”
-	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)u2_rx_buff;			// 内存地址，相当于几号柜
+	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)u2_r_buff;				// 内存地址，相当于几号柜
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;						//外设作为数据来源，即为收快递
 	DMA_InitStructure.DMA_BufferSize = BUFF_SIZE_UART;						// 缓存容量，即柜子大小
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;		// 外设地址不递增，即柜子对应的快递不变

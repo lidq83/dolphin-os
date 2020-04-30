@@ -15,6 +15,8 @@
 
 void uart1_init();
 
+void uart1_recv(void *buff, int *size);
+
 void uart1_send(void *buff, size_t size);
 
 #endif /* SRC_UART_H_ */

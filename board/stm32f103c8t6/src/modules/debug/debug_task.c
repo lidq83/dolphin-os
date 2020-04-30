@@ -6,21 +6,22 @@
  */
 
 #include <debug_task.h>
-
-static void debug_pthread(void);
+#include <serial.h>
 
 void debug_pthread(void)
 {
-	int a = 0;
+	uint8_t ch = 0;
 	while (1)
 	{
-		k_printf("int a = %d\n", a);
-		a++;
-		sleep_ticks(10);
+		while (serial_read(&ch) > 0)
+		{
+			serial_write(ch);
+		}
+		sleep_ticks(1);
 	}
 }
 
 void debug_task(void)
 {
-	pcb_create(24, &debug_pthread, NULL, 2048);
+	pcb_create(8, &debug_pthread, NULL, 2048);
 }

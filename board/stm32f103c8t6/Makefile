@@ -75,7 +75,6 @@ SRC			+=	./src/main/system_stm32f10x.c
 #------------------------------------------------------------------------#
 # Main function
 SRC			+=	./src/main/main.c \
-				./src/modules/stdio/stddev.c \
 				./src/modules/led/led_task.c \
 				./src/modules/debug/debug_task.c
 
@@ -87,14 +86,7 @@ SRC			+=	./src/libs/buff_s.c
 # Drv
 SRC			+=	./src/drv/led.c \
 				./src/drv/sysclk.c \
-				./src/drv/uart1.c \
-				./src/drv/uart2.c \
-				./src/drv/virtual_uart.c
-
-#------------------------------------------------------------------------#
-# Dev
-SRC			+=	./src/dev/ttyS1.c \
-				./src/dev/ttyS2.c
+				./src/drv/serial.c
 
 #------------------------------------------------------------------------#
 # OS Arch

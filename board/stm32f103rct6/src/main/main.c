@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
 	kernel_startup();
 
-	stddev_init();
+	//stddev_init();
 
 	pcb_clear_process();
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 	ttyS1_init();
 	ttyS2_init();
 
-	virtual_uart_init();
+	//virtual_uart_init();
 
 	led_task();
 
