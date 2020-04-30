@@ -9,6 +9,8 @@
 
 #include <typedef.h>
 #include <sche.h>
+#include <ttyS1.h>
+#include <ttyS2.h>
 
 void debug_task(void);
 

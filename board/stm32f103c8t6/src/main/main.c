@@ -11,6 +11,9 @@
 #include <sysclk.h>
 #include <serial1.h>
 #include <serial2.h>
+#include <ttyS1.h>
+#include <ttyS2.h>
+#include <std.h>
 #include <debug_task.h>
 #include <led_task.h>
 
@@ -37,17 +40,16 @@ int main(int argc, char *argv[])
 
 	kernel_startup();
 
-	pcb_clear_process();
+	std_init();
+	ttyS1_init();
+	ttyS2_init();
 
 	led_task();
-
 	debug_task();
 
 	sysclk_init();
-
 	while (1)
 	{
-		
 	}
 }
 

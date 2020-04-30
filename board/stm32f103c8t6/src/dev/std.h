@@ -1,6 +1,6 @@
 #ifndef _SRC_STDDEV_H
 #define _SRC_STDDEV_H
 
-int stddev_init(void);
+int std_init(void);
 
 #endif

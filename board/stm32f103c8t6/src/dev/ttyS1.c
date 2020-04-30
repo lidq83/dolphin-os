@@ -7,9 +7,6 @@
 
 #include <ttyS1.h>
 
-extern uint8_t *u1_t_buff;
-extern buff_s *u1_rx_buff;
-
 int ttyS1_open(struct file *fs);
 int ttyS1_close(struct file *fs);
 size_t ttyS1_read(struct file *fs, void *buff, size_t size);
@@ -28,29 +25,26 @@ int ttyS1_close(struct file *fs)
 
 size_t ttyS1_read(struct file *fs, void *buff, size_t size)
 {
-	char *buff_read = (char *)buff;
-	int size_u1 = buff_size(u1_rx_buff);
-	if (size_u1 < size)
+	uint8_t *p = (uint8_t *)buff;
+	size_t read_len = 0;
+	for (int i = 0; i < size; i++)
 	{
-		size = size_u1;
-	}
-	for (int i = 0; size > 0 && i < size; i++)
-	{
-		buff_read[i] = u1_rx_buff->buff[u1_rx_buff->foot];
-		u1_rx_buff->foot++;
-		u1_rx_buff->foot %= BUFF_SIZE_UART;
+		if (!serial1_read(&p[read_len]))
+		{
+			return read_len;
+		}
+		read_len++;
 	}
 	return size;
 }
 
 size_t ttyS1_write(struct file *fs, const void *buff, size_t size)
 {
-	if (size > BUFF_SIZE_UART)
+	uint8_t *p = (uint8_t *)buff;
+	for (int i = 0; i < size; i++)
 	{
-		size = BUFF_SIZE_UART;
+		serial1_write(p[i]);
 	}
-	char *p = (char *)buff;
-	uart1_send(p, size);
 	return size;
 }
 

@@ -48,7 +48,6 @@ CFLAGS		+=	-I./src/libs
 CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/dev
 CFLAGS		+=	-I./src/modules
-CFLAGS		+=	-I./src/modules/stdio
 CFLAGS		+=	-I./src/modules/led
 CFLAGS		+=	-I./src/modules/debug
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
@@ -89,6 +88,12 @@ SRC			+=	./src/drv/led.c \
 				./src/drv/serial1.c \
 				./src/drv/serial2.c \
 				./src/drv/virtual_uart.c
+
+#------------------------------------------------------------------------#
+# Dev
+SRC			+=	./src/dev/ttyS1.c \
+				./src/dev/ttyS2.c \
+				./src/dev/std.c
 
 #------------------------------------------------------------------------#
 # OS Arch

@@ -6,24 +6,15 @@
  */
 
 #include <debug_task.h>
-#include <serial1.h>
-#include <serial2.h>
 
 void debug_pthread(void)
 {
-	uint8_t ch = 0;
+	uint32_t num = 0;
 	while (1)
 	{
-		while (serial1_read(&ch) > 0)
-		{
-			serial2_write(ch);
-		}
-		while (serial2_read(&ch) > 0)
-		{
-			serial1_write(ch);
-		}
-		
-		sleep_ticks(1);
+		k_printf("debug test %d\n", num);
+		num++;
+		sleep_ticks(1000);
 	}
 }
 

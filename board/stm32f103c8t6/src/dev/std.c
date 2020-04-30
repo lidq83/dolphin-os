@@ -1,19 +1,13 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <fs.h>
-#include <stddev.h>
+#include <std.h>
 #include <virtual_uart.h>
 #include <buff_s.h>
 
-#define STD_OUT virtual_uart_send_char
-
 int stdout_write(struct file *f, const void *buf, size_t size)
 {
-	char *p = (char *)buf;
-	for (size_t i = 0; i < size; i++)
-	{
-		STD_OUT(p[i]);
-	}
+	virtual_uart_send_buff((char *)buf, size);
 	return size;
 }
 
@@ -34,7 +28,7 @@ int stderr_init(void)
 	return 0;
 }
 
-int stddev_init(void)
+int std_init(void)
 {
 	stdin_init();
 	stdout_init();

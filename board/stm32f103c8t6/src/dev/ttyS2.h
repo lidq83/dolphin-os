@@ -10,7 +10,7 @@
 #include <typedef.h>
 #include <fcntl.h>
 #include <fs.h>
-#include <uart2.h>
+#include <serial2.h>
 
 void ttyS2_init(void);
 
