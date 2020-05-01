@@ -1,7 +1,7 @@
 #ifndef __BUFF_S_H
 #define __BUFF_S_H
 
-#define BUFF_SIZE_UART (1024)
+#define BUFF_SIZE_UART (128)
 
 typedef struct buff_s
 {

@@ -19,7 +19,7 @@ void virtual_uart_init()
 	NVIC_InitTypeDef NVIC_InitStructure;
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	TIM_TimeBaseStructure.TIM_Prescaler = 1 - 1;
-	TIM_TimeBaseStructure.TIM_Period = 1250 - 1; // 1000000 / 115200 * 72 = 625
+	TIM_TimeBaseStructure.TIM_Period = 1875 - 1; // 1000000 / 38400 * 72 = 1875
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;

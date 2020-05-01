@@ -52,6 +52,7 @@ CFLAGS		+=	-I./src/modules/led
 CFLAGS		+=	-I./src/modules/debug
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
+CFLAGS		+=	-I$(KERNEL_PATH)/libc
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
 CFLAGS		+=	-I$(KERNEL_PATH)/fs
 CFLAGS		+=	-I$(KERNEL_PATH)/drv
@@ -110,6 +111,23 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \
 				$(KERNEL_PATH)/fs/fcntl.c \
+				$(KERNEL_PATH)/libc/lib_libnoflush.c \
+				$(KERNEL_PATH)/libc/lib_memoutstream.c \
+				$(KERNEL_PATH)/libc/lib_nulloutstream.c \
+				$(KERNEL_PATH)/libc/lib_libvsprintf.c \
+				$(KERNEL_PATH)/libc/lib_vsprintf.c \
+				$(KERNEL_PATH)/libc/lib_vsnprintf.c \
+				$(KERNEL_PATH)/libc/lib_snprintf.c \
+				$(KERNEL_PATH)/libc/lib_dtoa.c \
+				$(KERNEL_PATH)/libc/lib_strtod.c \
+				$(KERNEL_PATH)/libc/lib_strtof.c \
+				$(KERNEL_PATH)/libc/lib_strtol.c \
+				$(KERNEL_PATH)/libc/lib_strtoll.c \
+				$(KERNEL_PATH)/libc/lib_strtoul.c \
+				$(KERNEL_PATH)/libc/lib_strtoull.c \
+				$(KERNEL_PATH)/libc/lib_skipspace.c \
+				$(KERNEL_PATH)/libc/lib_checkbase.c \
+				$(KERNEL_PATH)/libc/lib_isbasedigit.c \
 				$(KERNEL_PATH)/lib/slist.c \
 				$(KERNEL_PATH)/lib/k_string.c \
 				$(KERNEL_PATH)/lib/k_printf.c \

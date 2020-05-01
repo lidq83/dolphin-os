@@ -9,12 +9,12 @@
 
 void debug_pthread(void)
 {
-	uint32_t num = 0;
+	float num = 0.0;
 	while (1)
 	{
-		k_printf("debug test %d\n", num);
-		num++;
-		sleep_ticks(1000);
+		k_printf("debug test %.2f\n", num);
+		num+=0.01;
+		sleep_ticks(100);
 	}
 }
 

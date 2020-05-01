@@ -7,17 +7,16 @@
 
 #include <typedef.h>
 #include <led.h>
-#include <serial1.h>
-#include <serial2.h>
 #include <core.h>
 #include <sysclk.h>
-#include <std.h>
-#include <virtual_uart.h>
+#include <serial1.h>
+#include <serial2.h>
 #include <ttyS1.h>
 #include <ttyS2.h>
-#include <virtual_uart.h>
-#include <led_task.h>
+#include <std.h>
 #include <debug_task.h>
+#include <led_task.h>
+#include <virtual_uart.h>
 
 /***************************************************************************************
  * 
