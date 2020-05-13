@@ -21,7 +21,11 @@ int lib_checkbase(int base, FAR const char **pptr);
 
 bool lib_isbasedigit(int ch, int base, int *value);
 
+long strtol(FAR const char *nptr, FAR char **endptr, int base);
+
 double strtod(FAR const char *str, FAR char **endptr);
+
+float strtof(FAR const char *str, FAR char **endptr);
 
 int snprintf(char *__restrict __s, size_t __maxlen,
 			 const char *__restrict __format, ...);

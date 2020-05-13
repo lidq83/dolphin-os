@@ -45,10 +45,12 @@ CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F4xx/Include
 KERNEL_PATH	=	../../src
 CFLAGS		+=	-I./src/main
 CFLAGS		+=	-I./src/modules
+CFLAGS		+=	-I./src/libs
 CFLAGS		+=	-I./src/hardware
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
+CFLAGS		+=	-I$(KERNEL_PATH)/libc
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
 CFLAGS		+=	-I$(KERNEL_PATH)/fs
 CFLAGS		+=	-I$(KERNEL_PATH)/drv
@@ -76,8 +78,11 @@ SRC			+=	./src/main/main.c \
 #------------------------------------------------------------------------#
 # Hardware function
 SRC			+=	./src/hardware/led.c \
-				./src/hardware/sysclk.c \
-				./src/hardware/uart2.c
+				./src/hardware/sysclk.c
+
+#------------------------------------------------------------------------#
+# Libs
+SRC			+=	./src/libs/buff_s.c
 
 #------------------------------------------------------------------------#
 # Modules
@@ -95,13 +100,36 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/mm/mm.c \
+				$(KERNEL_PATH)/mm/mm_addfreechunk.c \
+				$(KERNEL_PATH)/mm/mm_shrinkchunk.c \
+				$(KERNEL_PATH)/mm/mm_free.c \
+				$(KERNEL_PATH)/mm/mm_initialize.c \
+				$(KERNEL_PATH)/mm/mm_malloc.c \
+				$(KERNEL_PATH)/mm/mm_realloc.c \
+				$(KERNEL_PATH)/mm/mm_sem.c \
+				$(KERNEL_PATH)/mm/mm_size2ndx.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \
 				$(KERNEL_PATH)/fs/fcntl.c \
+				$(KERNEL_PATH)/libc/lib_libnoflush.c \
+				$(KERNEL_PATH)/libc/lib_memoutstream.c \
+				$(KERNEL_PATH)/libc/lib_nulloutstream.c \
+				$(KERNEL_PATH)/libc/lib_libvsprintf.c \
+				$(KERNEL_PATH)/libc/lib_vsprintf.c \
+				$(KERNEL_PATH)/libc/lib_vsnprintf.c \
+				$(KERNEL_PATH)/libc/lib_snprintf.c \
+				$(KERNEL_PATH)/libc/lib_dtoa.c \
+				$(KERNEL_PATH)/libc/lib_strtod.c \
+				$(KERNEL_PATH)/libc/lib_strtof.c \
+				$(KERNEL_PATH)/libc/lib_strtol.c \
+				$(KERNEL_PATH)/libc/lib_strtoll.c \
+				$(KERNEL_PATH)/libc/lib_strtoul.c \
+				$(KERNEL_PATH)/libc/lib_strtoull.c \
+				$(KERNEL_PATH)/libc/lib_skipspace.c \
+				$(KERNEL_PATH)/libc/lib_checkbase.c \
+				$(KERNEL_PATH)/libc/lib_isbasedigit.c \
 				$(KERNEL_PATH)/lib/slist.c \
-				$(KERNEL_PATH)/lib/k_string.c \
-				$(KERNEL_PATH)/lib/k_printf.c \
-				$(KERNEL_PATH)/lib/k_scanf.c
+				$(KERNEL_PATH)/lib/k_printf.c
 
 STARTUP		=	./src/main/startup_stm32f40xx.s
 

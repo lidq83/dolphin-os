@@ -108,6 +108,14 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
 				$(KERNEL_PATH)/mm/mm.c \
+				$(KERNEL_PATH)/mm/mm_addfreechunk.c \
+				$(KERNEL_PATH)/mm/mm_shrinkchunk.c \
+				$(KERNEL_PATH)/mm/mm_free.c \
+				$(KERNEL_PATH)/mm/mm_initialize.c \
+				$(KERNEL_PATH)/mm/mm_malloc.c \
+				$(KERNEL_PATH)/mm/mm_realloc.c \
+				$(KERNEL_PATH)/mm/mm_sem.c \
+				$(KERNEL_PATH)/mm/mm_size2ndx.c \
 				$(KERNEL_PATH)/fs/vfs.c \
 				$(KERNEL_PATH)/fs/fs.c \
 				$(KERNEL_PATH)/fs/fcntl.c \
@@ -129,9 +137,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/libc/lib_checkbase.c \
 				$(KERNEL_PATH)/libc/lib_isbasedigit.c \
 				$(KERNEL_PATH)/lib/slist.c \
-				$(KERNEL_PATH)/lib/k_string.c \
-				$(KERNEL_PATH)/lib/k_printf.c \
-				$(KERNEL_PATH)/lib/k_scanf.c
+				$(KERNEL_PATH)/lib/k_printf.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s
 

@@ -7,7 +7,6 @@
 #include <typedef.h>
 #include <led.h>
 #include <sysclk.h>
-#include <uart2.h>
 #include <core.h>
 #include <stddev.h>
 #include <task.h>
@@ -17,8 +16,6 @@ int startup = 0;
 int main(int argc, char *argv[])
 {
 	led_init();
-
-	uart2_init();
 
 	kernel_startup();
 

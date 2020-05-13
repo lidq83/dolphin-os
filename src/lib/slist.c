@@ -36,7 +36,7 @@ int slist_init(slist_s *list)
 		return -1;
 	}
 
-	k_memset(list, 0, sizeof(slist_s));
+	memset(list, 0, sizeof(slist_s));
 	//初始化位图，所有位置均可用
 	list->use_map = ~0x0;
 	return 0;

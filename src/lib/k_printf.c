@@ -35,7 +35,7 @@ int k_printf(char *fmt, ...)
 	va_start(ap, fmt);
 	ret = vsnprintf(buff, BUFF_SIZE_UART, fmt, ap);
 	va_end(ap);
-	
+
 	write(1, buff, ret);
 
 	sem_post(&sem_p);

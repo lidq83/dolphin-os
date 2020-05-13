@@ -163,16 +163,12 @@ static void lib_dtoa(FAR struct lib_outstream_s *obj, int fmt, int prec,
 			prec = MAX(1, prec);
 		}
 	}
-
 	/* A non-zero value will be printed */
-
 	else
 	{
-
 		/* Handle the case where the value is less than 1.0 (in magnitude) and
        * will need a leading zero.
        */
-
 		if (expt <= 0)
 		{
 			/* Print a single zero to the left of the decimal point */

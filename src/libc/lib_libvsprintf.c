@@ -1621,6 +1621,7 @@ int lib_vsprintf(FAR struct lib_outstream_s *obj, FAR const char *src,
 			/* Perform right field justification actions */
 
 			postjustify(obj, fmt, 0, width, dblsize);
+			
 #else
 			/* Output the number with a fixed precision */
 

@@ -88,7 +88,7 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	//文件使用位图
 	pcbs[prio].f_use_map = ~0x7;
 	//初始化文件描述符
-	k_memset(pcbs[prio].fnodes, 0, sizeof(void *) * FNODE_SIZE);
+	memset(pcbs[prio].fnodes, 0, sizeof(void *) * FNODE_SIZE);
 	//获取标准IO的节点指针
 	vfs_node_s *node_stdin = vfs_find_node("/dev/stdin");
 	vfs_node_s *node_stdout = vfs_find_node("/dev/stdout");
@@ -185,7 +185,7 @@ void pcb_clear_stoped(void)
 			if (pcbs[i].status == PCB_ST_STOPED)
 			{
 				free(pcbs[i].p_stack_mem);
-				k_memset(&pcbs[i], 0, sizeof(pcb_s));
+				memset(&pcbs[i], 0, sizeof(pcb_s));
 			}
 		}
 	}
