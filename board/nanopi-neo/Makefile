@@ -34,7 +34,7 @@ CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
 CFLAGS		+=	-Wno-unused-variable
 CFLAGS		+=	-nostartfiles
-CFLAGS		+=	-g
+CFLAGS		+=	-g -Os
 CFLAGS		+=	-I./
 CFLAGS		+=	-DHAVE_CCONFIG_H -DGCC_BUILD -DLINUX -DRT_USING_NEWLIB
 

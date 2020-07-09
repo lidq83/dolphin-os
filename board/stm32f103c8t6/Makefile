@@ -19,7 +19,7 @@ READELF		=	arm-none-eabi-readelf
 
 #------------------------------------------------------------------------#
 # Flags
-CFLAGS		+=	-g
+CFLAGS		+=	-g -Os
 CFLAGS		+=	-mthumb
 CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
