@@ -74,7 +74,7 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	//初始化pcb状态
 	pcbs[prio].status = PCB_ST_INIT;
 	//初始化栈
-	pcbs[prio].p_stack = stack_init(&stack[stack_size], pcb_runner);
+	pcbs[prio].p_stack = stack_init((uint32_t *)&stack[stack_size], pcb_runner);
 	//栈内存地址
 	pcbs[prio].p_stack_mem = stack;
 	//优先级

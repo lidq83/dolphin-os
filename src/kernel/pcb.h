@@ -17,33 +17,33 @@
 
 typedef enum pcb_st_e
 {
-    PCB_ST_INIT = 0,
-    PCB_ST_READ,
-    PCB_ST_BLOCK,
-    PCB_ST_STOPED
+	PCB_ST_INIT = 0,
+	PCB_ST_READ,
+	PCB_ST_BLOCK,
+	PCB_ST_STOPED
 } pcb_st_e;
 
 //进程控制块Process Control Block
 typedef struct pcb_s
 {
-    //进程栈顶地址
-    void *p_stack;
-    //栈内存地址，释放内存时使用
-    void *p_stack_mem;
-    //优先级由高0到低32
-    uint8_t prio;
-     //任务状态
-    uint8_t status;
-    //任务休眠ticks
-    uint32_t sleep_tick;
-    //任务入口函数
-    void (*task_entry)(void *);
-    //任务函数参数
-    void *task_arg;
-    //进程的文件描位图，1表示空闲，0表示使用
-    uint32_t f_use_map;
-    //进程的文件描述符
-    vfs_node_s *fnodes[FNODE_SIZE];
+	//进程栈顶地址
+	void *p_stack;
+	//栈内存地址，释放内存时使用
+	void *p_stack_mem;
+	//优先级由高0到低32
+	uint8_t prio;
+	//任务状态
+	uint8_t status;
+	//任务休眠ticks
+	uint32_t sleep_tick;
+	//任务入口函数
+	void (*task_entry)(void *);
+	//任务函数参数
+	void *task_arg;
+	//进程的文件描位图，1表示空闲，0表示使用
+	uint32_t f_use_map;
+	//进程的文件描述符
+	vfs_node_s *fnodes[FNODE_SIZE];
 } pcb_s;
 
 //创建pcb资源清理进程
