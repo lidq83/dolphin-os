@@ -29,5 +29,5 @@ void led_pthread(void)
 
 void led_task(void)
 {
-	pcb_create(28, &led_pthread, NULL, 512);
+	pcb_create(29, &led_pthread, NULL, 200);
 }

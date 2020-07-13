@@ -49,7 +49,7 @@ CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/dev
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/led
-CFLAGS		+=	-I./src/modules/debug
+CFLAGS		+=	-I./src/modules/top
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
 CFLAGS		+=	-I$(KERNEL_PATH)/libc
@@ -76,7 +76,7 @@ SRC			+=	./src/main/system_stm32f10x.c
 # Main function
 SRC			+=	./src/main/main.c \
 				./src/modules/led/led_task.c \
-				./src/modules/debug/debug_task.c
+				./src/modules/top/top_task.c
 
 #------------------------------------------------------------------------#
 # Libs
@@ -107,6 +107,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/kernel/top.c \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/mm/mm_addfreechunk.c \
 				$(KERNEL_PATH)/mm/mm_shrinkchunk.c \

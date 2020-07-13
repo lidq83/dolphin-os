@@ -14,7 +14,7 @@
 #include <ttyS1.h>
 #include <ttyS2.h>
 #include <std.h>
-#include <debug_task.h>
+#include <top_task.h>
 #include <led_task.h>
 #include <virtual_uart.h>
 
@@ -37,17 +37,17 @@ int main(int argc, char *argv[])
 	led_init();
 
 	serial1_init();
-	serial2_init();
-	virtual_uart_init();
+	//serial2_init();
+	//virtual_uart_init();
 
 	kernel_startup();
 
 	std_init();
-	ttyS1_init();
-	ttyS2_init();
+	//ttyS1_init();
+	//ttyS2_init();
 
 	led_task();
-	debug_task();
+	top_task();
 
 	sysclk_init();
 	while (1)

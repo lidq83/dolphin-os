@@ -24,8 +24,8 @@
 
 #include <typedef.h>
 
-#define RX_BUFFER2_SIZE 128
-#define TX_BUFFER2_SIZE 64
+#define RX_BUFFER2_SIZE 253
+#define TX_BUFFER2_SIZE 128
 
 void serial2_init(void);
 

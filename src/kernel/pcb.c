@@ -60,7 +60,7 @@ static void pcb_clear_stoped(void);
 void pcb_clear_process(void)
 {
 	//pcb资源进程优先级30
-	pcb_create(PROCESS_CNT - 2, &pcb_clear_stoped, NULL, 1024);
+	pcb_create(PROCESS_CNT - 2, &pcb_clear_stoped, NULL, 200);
 }
 
 //创建一个进程
@@ -71,12 +71,16 @@ pcb_s *pcb_create(uint8_t prio, void *p_entry, void *p_arg, uint32_t stack_size)
 	{
 		return NULL;
 	}
+	//设置栈内存默认值以便统计
+	memset(stack , 0xff, stack_size);
 	//初始化pcb状态
 	pcbs[prio].status = PCB_ST_INIT;
 	//初始化栈
 	pcbs[prio].p_stack = stack_init((uint32_t *)&stack[stack_size], pcb_runner);
 	//栈内存地址
 	pcbs[prio].p_stack_mem = stack;
+	//栈内存大小
+	pcbs[prio].stack_size = stack_size;
 	//优先级
 	pcbs[prio].prio = prio;
 	//休眠tick数
@@ -185,7 +189,7 @@ void pcb_clear_stoped(void)
 			if (pcbs[i].status == PCB_ST_STOPED)
 			{
 				free(pcbs[i].p_stack_mem);
-				memset(&pcbs[i], 0, sizeof(pcb_s));
+				pcbs[i].stack_size = 0;
 			}
 		}
 	}

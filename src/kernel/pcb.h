@@ -28,8 +28,10 @@ typedef struct pcb_s
 {
 	//进程栈顶地址
 	void *p_stack;
-	//栈内存地址，释放内存时使用
+	//栈内存地址，释放、统计内存时使用
 	void *p_stack_mem;
+	//栈内在大小
+	uint32_t stack_size; 
 	//优先级由高0到低32
 	uint8_t prio;
 	//任务状态
