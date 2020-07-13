@@ -20,6 +20,7 @@ void top_pthread(void)
 		for (int i = 0; i < cnt; i++)
 		{
 			k_printf("%u\t%u / %u\n", t[i].prio, t[i].stack_used, t[i].stack_size);
+			sleep_ticks(5);
 		}
 		k_printf("\n");
 
