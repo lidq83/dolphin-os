@@ -42,7 +42,7 @@ CFLAGS		+=	-DHAVE_CCONFIG_H -DGCC_BUILD -DLINUX -DRT_USING_NEWLIB
 # Link script
 CFLAGS		+=	-Wl,-Tdolphin-os.ld
 
-KERNEL_PATH	=	../../src
+KERNEL_PATH	=	../../kernel
 CFLAGS		+=	-I./src/include
 CFLAGS		+=	-I./src/main
 CFLAGS		+=	-I./src/hardware

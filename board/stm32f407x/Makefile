@@ -42,7 +42,7 @@ CFLAGS		+=	-I$(STM32_LIBS)/inc
 CFLAGS		+=	-Ilibs/CMSIS/Include
 CFLAGS		+=	-Ilibs/CMSIS/Device/ST/STM32F4xx/Include
 
-KERNEL_PATH	=	../../src
+KERNEL_PATH	=	../../kernel
 CFLAGS		+=	-I./src/main
 CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/libs

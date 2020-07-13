@@ -35,7 +35,7 @@ CFLAGS		+=	-nostartfiles
 # Link script
 CFLAGS		+=	-Wl,-Tdolphin-os.ld
 
-KERNEL_PATH	=	../../src
+KERNEL_PATH	=	../../kernel
 CFLAGS		+=	-I./src
 CFLAGS		+=	-I$(KERNEL_PATH)/kernel
 CFLAGS		+=	-I$(KERNEL_PATH)/lib
