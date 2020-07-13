@@ -1,0 +1,7 @@
+[submodule "dolphin-os-kernel"]
+path = kernel
+url = github:lidq83/dolphin-os-kernel
+
+[submodule "kernel"]
+	path = kernel
+	url = github:lidq83/dolphin-os-kernel
