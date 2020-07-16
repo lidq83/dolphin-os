@@ -20,6 +20,7 @@ READELF		=	arm-none-eabi-readelf
 #------------------------------------------------------------------------#
 # Flags
 CFLAGS		+=	-g -Os
+CFLAGS		+=	-lm
 CFLAGS		+=	-mthumb
 CFLAGS		+=	-Wno-incompatible-pointer-types
 CFLAGS		+=	-Wno-unused-but-set-variable
@@ -159,10 +160,10 @@ $(CODE_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $^ > $@
 
 $(STARTUP_OBJ):$(STARTUP)
-	$(CC) $(CFLAGS) $^ -c $(STARTUP)
+	$(CC) $^ $(CFLAGS) -c $(STARTUP)
 
 $(ELF_FILE):$(SRC) $(STARTUP_OBJ)
-	$(CC) $(CFLAGS)	$^ -o $@
+	$(CC) $^ $(CFLAGS) -o $@
 
 install:
 	jlink -commanderscript loadbin_cmd.jlink
