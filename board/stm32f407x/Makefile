@@ -30,6 +30,7 @@ CFLAGS		+=	-I./
 CFLAGS		+=	-D"assert_param(expr)=((void)0)"
 CFLAGS		+=	-D STM32F40XX
 CFLAGS		+=	-nostartfiles
+CFLAGS		+=	-nostdlib
 
 #------------------------------------------------------------------------#
 # Link script

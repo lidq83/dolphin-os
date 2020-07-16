@@ -16,13 +16,13 @@ void top_pthread(void)
 	while (1)
 	{
 		int cnt = top(t);
-		k_printf("PID\t[USED / STACK]\n");
+		printf("PID\t[USED / STACK]\n");
 		for (int i = 0; i < cnt; i++)
 		{
-			k_printf("%u\t%u / %u\n", t[i].prio, t[i].stack_used, t[i].stack_size);
+			printf("%u\t%u / %u\n", t[i].prio, t[i].stack_used, t[i].stack_size);
 			sleep_ticks(5);
 		}
-		k_printf("\n");
+		printf("\n");
 
 		sleep_ticks(1000);
 	}

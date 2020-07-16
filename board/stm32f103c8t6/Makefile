@@ -138,7 +138,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/libc/lib_checkbase.c \
 				$(KERNEL_PATH)/libc/lib_isbasedigit.c \
 				$(KERNEL_PATH)/lib/slist.c \
-				$(KERNEL_PATH)/lib/k_printf.c
+				$(KERNEL_PATH)/lib/stdio.c
 
 STARTUP		=	./src/main/startup_stm32f10x_md.s
 
