@@ -8,7 +8,6 @@
 #include <task.h>
 #include <led.h>
 #include <k_printf.h>
-#include <k_scanf.h>
 
 #define STACK_SIZE (512)
 

@@ -99,12 +99,14 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/kernel/top.c \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/mm/mm_addfreechunk.c \
 				$(KERNEL_PATH)/mm/mm_shrinkchunk.c \
 				$(KERNEL_PATH)/mm/mm_free.c \
 				$(KERNEL_PATH)/mm/mm_initialize.c \
 				$(KERNEL_PATH)/mm/mm_malloc.c \
+				$(KERNEL_PATH)/mm/mm_mallinfo.c \
 				$(KERNEL_PATH)/mm/mm_realloc.c \
 				$(KERNEL_PATH)/mm/mm_sem.c \
 				$(KERNEL_PATH)/mm/mm_size2ndx.c \
