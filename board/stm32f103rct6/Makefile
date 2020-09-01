@@ -107,6 +107,7 @@ SRC			+=	$(KERNEL_PATH)/kernel/core.c \
 				$(KERNEL_PATH)/kernel/pcb.c \
 				$(KERNEL_PATH)/kernel/sche.c \
 				$(KERNEL_PATH)/kernel/sem.c \
+				$(KERNEL_PATH)/kernel/top.c \
 				$(KERNEL_PATH)/mm/mm.c \
 				$(KERNEL_PATH)/mm/mm_addfreechunk.c \
 				$(KERNEL_PATH)/mm/mm_shrinkchunk.c \
