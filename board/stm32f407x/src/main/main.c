@@ -11,8 +11,6 @@
 #include <stddev.h>
 #include <task.h>
 
-int startup = 0;
-
 int main(int argc, char *argv[])
 {
 	led_init();
@@ -24,8 +22,6 @@ int main(int argc, char *argv[])
 	pcb_clear_process();
 
 	task_led_blink();
-
-	startup = 1;
 
 	sysclk_init();
 
