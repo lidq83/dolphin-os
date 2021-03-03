@@ -1,4 +1,4 @@
-device STM32F407ZG
+device STM32F407VE
 si 1
 speed 4000
 erase
