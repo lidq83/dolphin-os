@@ -1,5 +1,5 @@
-#ifndef __LED_H
-#define __LED_H
+#ifndef __DRIVERS_LED_H
+#define __DRIVERS_LED_H
 
 #include <board.h>
 

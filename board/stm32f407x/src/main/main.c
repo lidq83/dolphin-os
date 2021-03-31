@@ -7,7 +7,6 @@
 #include <board.h>
 #include <core.h>
 #include <hmc5883l_task.h>
-#include <led_drv.h>
 #include <led_task.h>
 #include <serial1.h>
 #include <std.h>
@@ -15,7 +14,8 @@
 
 int main(int argc, char* argv[])
 {
-	led_drv_init();
+	board_init();
+	
 	serial1_init();
 
 	kernel_startup();
@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 
 	led_task();
 	hmc5883l_task();
+
 	sysclk_init();
 
 	while (1)

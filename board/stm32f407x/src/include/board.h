@@ -26,4 +26,6 @@
 #define PRIO_HMC5883L (28)
 #define PRIO_LED (29)
 
+int board_init(void);
+
 #endif

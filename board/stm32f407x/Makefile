@@ -63,6 +63,7 @@ CFLAGS		+=	-I$(KERNEL_PATH)/drv
 
 DRIVERS		=	../../drivers
 CFLAGS		+=	-I$(DRIVERS)/led
+CFLAGS		+=	-I$(DRIVERS)/sysclk
 
 #------------------------------------------------------------------------#
 # StdPeriph
@@ -81,17 +82,17 @@ SRC			+=	./src/main/system_stm32f4xx.c
 
 #------------------------------------------------------------------------#
 # Main function
-SRC			+=	./src/main/main.c
+SRC			+=	./src/main/main.c \
+				./src/main/board.c
 
 #------------------------------------------------------------------------#
 # Drivers
-SRC			+=	$(DRIVERS)/led/led.c
+SRC			+=	$(DRIVERS)/led/led.c \
+				$(DRIVERS)/sysclk/sysclk.c
 
 #------------------------------------------------------------------------#
 # Hardware function
-SRC			+=	./src/drv/led_drv.c \
-				./src/drv/sysclk.c \
-				./src/drv/serial1.c \
+SRC			+=	./src/drv/serial1.c \
 				./src/drv/i2c.c \
 				./src/drv/hmc5883l.c \
 				./src/dev/std.c
