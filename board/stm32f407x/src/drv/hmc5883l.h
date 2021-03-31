@@ -1,7 +1,7 @@
 #ifndef __HMC5883L_H_
 #define __HMC5883L_H_
 
-#include <typedef.h>
+#include <board.h>
 #include <i2c.h>
 
 #define HMC5883L_ADDRESS 0x1E // this device only has one address

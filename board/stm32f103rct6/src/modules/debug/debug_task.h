@@ -7,7 +7,7 @@
 #ifndef __SRC_DEBUG_TASK_H
 #define __SRC_DEBUG_TASK_H
 
-#include <typedef.h>
+#include <board.h>
 #include <sche.h>
 #include <k_printf.h>
 

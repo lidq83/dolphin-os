@@ -61,6 +61,9 @@ CFLAGS		+=	-I$(KERNEL_PATH)/mm
 CFLAGS		+=	-I$(KERNEL_PATH)/fs
 CFLAGS		+=	-I$(KERNEL_PATH)/drv
 
+DRIVERS		=	../../drivers
+CFLAGS		+=	-I$(DRIVERS)/led
+
 #------------------------------------------------------------------------#
 # StdPeriph
 SRC			=	$(STM32_LIBS)/src/misc.c \
@@ -81,8 +84,12 @@ SRC			+=	./src/main/system_stm32f4xx.c
 SRC			+=	./src/main/main.c
 
 #------------------------------------------------------------------------#
+# Drivers
+SRC			+=	$(DRIVERS)/led/led.c
+
+#------------------------------------------------------------------------#
 # Hardware function
-SRC			+=	./src/drv/led.c \
+SRC			+=	./src/drv/led_drv.c \
 				./src/drv/sysclk.c \
 				./src/drv/serial1.c \
 				./src/drv/i2c.c \

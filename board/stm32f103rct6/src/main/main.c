@@ -5,8 +5,8 @@
  *      Author: lidq
  */
 
-#include <typedef.h>
-#include <led.h>
+#include <board.h>
+#include <led_drv.h>
 #include <core.h>
 #include <sysclk.h>
 #include <serial1.h>
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 	rcc_config();
 
-	led_init();
+	led_drv_init();
 
 	serial1_init();
 	serial2_init();

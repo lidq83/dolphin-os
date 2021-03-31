@@ -4,17 +4,18 @@
  *  Created on: December 23, 2019
  *      Author: lidq
  */
+#include <board.h>
 #include <core.h>
 #include <hmc5883l_task.h>
+#include <led_drv.h>
 #include <led_task.h>
 #include <serial1.h>
 #include <std.h>
 #include <sysclk.h>
-#include <typedef.h>
 
 int main(int argc, char* argv[])
 {
-	led_init();
+	led_drv_init();
 	serial1_init();
 
 	kernel_startup();

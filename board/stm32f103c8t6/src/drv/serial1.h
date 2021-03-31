@@ -22,7 +22,7 @@
 #ifndef __SERIAL1_H
 #define __SERIAL1_H
 
-#include <typedef.h>
+#include <board.h>
 
 #define RX_BUFFER1_SIZE 253
 #define TX_BUFFER1_SIZE 128

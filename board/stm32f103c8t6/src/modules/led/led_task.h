@@ -7,7 +7,7 @@
 #ifndef __SRC_LED_TASK_H
 #define __SRC_LED_TASK_H
 
-#include <typedef.h>
+#include <board.h>
 #include <sche.h>
 #include <sem.h>
 #include <led.h>

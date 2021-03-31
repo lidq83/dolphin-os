@@ -1,7 +1,7 @@
 #ifndef __DRV_USART1_H
 #define __DRV_USART1_H
 
-#include <typedef.h>
+#include <board.h>
 
 void RCC_Configuration(void);
 

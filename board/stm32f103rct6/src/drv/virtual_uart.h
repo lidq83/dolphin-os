@@ -1,7 +1,7 @@
 #ifndef __VIRTUAL_UART_H
 #define __VIRTUAL_UART_H
 
-#include <typedef.h>
+#include <board.h>
 
 void virtual_uart_init();
 

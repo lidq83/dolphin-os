@@ -7,7 +7,7 @@
 #ifndef __SRC_TTYS2_H
 #define __SRC_TTYS2_H
 
-#include <typedef.h>
+#include <board.h>
 #include <fcntl.h>
 #include <fs.h>
 #include <serial2.h>

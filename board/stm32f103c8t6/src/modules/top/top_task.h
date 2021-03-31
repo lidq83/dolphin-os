@@ -7,7 +7,7 @@
 #ifndef __SRC_TOP_TASK_H
 #define __SRC_TOP_TASK_H
 
-#include <typedef.h>
+#include <board.h>
 #include <sche.h>
 #include <sem.h>
 #include <mm.h>

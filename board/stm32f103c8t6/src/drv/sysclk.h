@@ -8,7 +8,7 @@
 #ifndef __MODULES_SYSCLK_H
 #define __MODULES_SYSCLK_H
 
-#include <typedef.h>
+#include <board.h>
 
 //初始化系统时钟
 void sysclk_init();

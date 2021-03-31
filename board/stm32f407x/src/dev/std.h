@@ -1,6 +1,8 @@
 #ifndef _DEV_STD_H
 #define _DEV_STD_H
 
+#include <board.h>
+
 void stddev_putchar(char ch);
 
 int std_init(void);

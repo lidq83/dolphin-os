@@ -8,7 +8,7 @@
 #ifndef __MODULES_SYSCLK_H
 #define __MODULES_SYSCLK_H
 
-#include <typedef.h>
+#include <board.h>
 
 #include "stm32f4xx.h"
 

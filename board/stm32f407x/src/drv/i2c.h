@@ -1,7 +1,7 @@
 #ifndef __I2C_H
 #define __I2C_H
 
-#include <typedef.h>
+#include <board.h>
 
 #define I2C2_PERIPH RCC_APB1Periph_I2C2
 #define I2C2_RCC_Port RCC_AHB1Periph_GPIOB
