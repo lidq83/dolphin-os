@@ -2,21 +2,9 @@
 #define __HMC5883L_H_
 
 #include <typedef.h>
-
-#ifndef M_PI
-#define M_PI (3.141592654)
-#endif
-
-#define HMC5883L_I2C I2C2
-#define HMC5883L_I2C_RCC_Periph RCC_APB1Periph_I2C2
-#define HMC5883L_I2C_Port GPIOB
-#define HMC5883L_I2C_SCL_Pin GPIO_Pin_10
-#define HMC5883L_I2C_SDA_Pin GPIO_Pin_11
-#define HMC5883L_I2C_RCC_Port RCC_AHB1Periph_GPIOB
-#define HMC5883L_I2C_Speed 100000
+#include <i2c.h>
 
 #define HMC5883L_ADDRESS 0x1E // this device only has one address
-#define HMC5883L_DEFAULT_ADDRESS (HMC5883L_ADDRESS << 1)
 
 #define HMC5883L_RA_CONFIG_A 0x00
 #define HMC5883L_RA_CONFIG_B 0x01
@@ -107,9 +95,5 @@ void HMC5883L_WriteBits(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitStart, ui
 void HMC5883L_WriteBit(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data);
 void HMC5883L_ReadBits(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint8_t* data);
 void HMC5883L_ReadBit(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitNum, uint8_t* data);
-
-void HMC5883L_I2C_Init();
-void HMC5883L_I2C_ByteWrite(u8 slaveAddr, u8* pBuffer, u8 WriteAddr);
-void HMC5883L_I2C_BufferRead(u8 slaveAddr, u8* pBuffer, u8 ReadAddr, u16 NumByteToRead);
 
 #endif

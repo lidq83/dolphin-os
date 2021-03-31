@@ -19,7 +19,6 @@ READELF		=	arm-none-eabi-readelf
 
 #------------------------------------------------------------------------#
 # Flags
-CFLAGS		+=	-lm
 CFLAGS		+=	-std=gnu11 -g -Os
 
 CFLAGS		+=	-mthumb
@@ -86,6 +85,7 @@ SRC			+=	./src/main/main.c
 SRC			+=	./src/drv/led.c \
 				./src/drv/sysclk.c \
 				./src/drv/serial1.c \
+				./src/drv/i2c.c \
 				./src/drv/hmc5883l.c \
 				./src/dev/std.c
 

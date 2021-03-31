@@ -16,7 +16,7 @@ void* hmc5883l_pthread(void* arg)
 	// k_printf("%d %d %d %d %d\n", info.arena, info.ordblks, info.mxordblk, info.uordblks, info.fordblks);
 
 	k_printf("I2c init\n");
-	HMC5883L_I2C_Init();
+	i2c2_init();
 
 	k_printf("hmc5883l init\n");
 	HMC5883L_Initialize();
@@ -62,7 +62,7 @@ void* hmc5883l_pthread(void* arg)
 		angle = ang * filter + angle_last * (1.0 - filter);
 		angle_last = angle;
 
-		k_printf("%+8.3f %+6d\n", angle * 180.0 / M_PI, cycle_a);
+		k_printf("%+8.3f\n", angle * 180.0 / M_PI);
 		tk++;
 
 		sleep_ticks(25);
