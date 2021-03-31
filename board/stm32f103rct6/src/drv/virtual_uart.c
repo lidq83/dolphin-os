@@ -60,7 +60,7 @@ uint16_t get_curr_data(void)
 		data |= 9 << 10;
 
 		tx_buff.foot++;
-		tx_buff.foot %= BUFF_SIZE_UART;
+		tx_buff.foot %= BUFF_SIZE;
 	}
 
 	return data;

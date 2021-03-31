@@ -6,10 +6,10 @@
 #include <math.h>
 #include <misc.h>
 #include <stdint.h>
+#include <board.h>
+#include <math.h>
 
-#define PRIO_TASK_LED (20)
-
-#define BUFF_SIZE (16)
-#define USB_BUFF_SIZE (1024)
+#define PRIO_HMC5883L (28)
+#define PRIO_LED (29)
 
 #endif

@@ -1,9 +1,9 @@
-#ifndef _SRC_STDDEV_H
-#define _SRC_STDDEV_H
+#ifndef _DEV_STD_H
+#define _DEV_STD_H
 
 void stddev_putchar(char ch);
 
-int stddev_init(void);
+int std_init(void);
 
 int stdin_init(void);
 

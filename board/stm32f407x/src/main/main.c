@@ -4,25 +4,24 @@
  *  Created on: December 23, 2019
  *      Author: lidq
  */
-#include <typedef.h>
-#include <led.h>
-#include <sysclk.h>
 #include <core.h>
-#include <stddev.h>
-#include <task.h>
+#include <hmc5883l_task.h>
+#include <led_task.h>
+#include <serial1.h>
+#include <std.h>
+#include <sysclk.h>
+#include <typedef.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	led_init();
+	serial1_init();
 
 	kernel_startup();
+	std_init();
 
-	stddev_init();
-
-	pcb_clear_process();
-
-	task_led_blink();
-
+	led_task();
+	hmc5883l_task();
 	sysclk_init();
 
 	while (1)

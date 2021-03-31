@@ -21,8 +21,8 @@
 /***************************************************************************************
  * 
  * libs/STM32_USB-FS-Device_Lib_V4.0.0/Libraries/CMSIS/Device/ST/STM32F10x/Include/stm32f10x.h
- * #define HSE_VALUE    ((uint32_t)16000000)
- * #define HSI_VALUE    ((uint32_t)16000000)
+ * #define HSE_VALUE    ((uint32_t)8000000)
+ * #define HSI_VALUE    ((uint32_t)8000000)
  *
  ***************************************************************************************/
 
@@ -71,8 +71,8 @@ void rcc_config()
 		RCC_PCLK1Config(RCC_HCLK_Div2);
 		RCC_PCLK2Config(RCC_HCLK_Div1);
 
-		// 16 / 2 * 9 = 72
-		RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_9);
+		// 8 / 1 * 9 = 72
+		RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
 
 		RCC_PLLCmd(ENABLE);
 		while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)

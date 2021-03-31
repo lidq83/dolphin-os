@@ -5,17 +5,11 @@
  *      Author: lidq
  */
 
-#include <k_printf.h>
-#include <led.h>
-#include <task.h>
-
-#define STACK_SIZE (512)
-
-static void task_led(void);
+#include <led_task.h>
 
 static led_s led[2] = { 0, 0x05, 1, 0xAA };
 
-void task_led(void)
+void* led_pthread(void *arg)
 {
 	for (uint8_t i = 0;; i++)
 	{
@@ -32,10 +26,10 @@ void task_led(void)
 		}
 		sleep_ticks(125);
 	}
+	return NULL;
 }
 
-void task_led_blink(void)
+void led_task(void)
 {
-	//led闪烁
-	pcb_create(PRIO_TASK_LED, &task_led, NULL, STACK_SIZE);
+	pcb_create(PRIO_LED, &led_pthread, NULL, 400);
 }

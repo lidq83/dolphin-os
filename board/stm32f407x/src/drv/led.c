@@ -19,10 +19,10 @@ void led_off(int led)
 	switch (led)
 	{
 	case 0:
-		GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+		GPIO_WriteBit(GPIOA, GPIO_Pin_6, 1);
 		break;
 	case 1:
-		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+		GPIO_WriteBit(GPIOA, GPIO_Pin_7, 1);
 		break;
 	default:
 		break;
@@ -34,10 +34,10 @@ void led_on(int led)
 	switch (led)
 	{
 	case 0:
-		GPIO_SetBits(GPIOA, GPIO_Pin_6);
+		GPIO_WriteBit(GPIOA, GPIO_Pin_6, 0);
 		break;
 	case 1:
-		GPIO_SetBits(GPIOA, GPIO_Pin_7);
+		GPIO_WriteBit(GPIOA, GPIO_Pin_7, 0);
 		break;
 	default:
 		break;

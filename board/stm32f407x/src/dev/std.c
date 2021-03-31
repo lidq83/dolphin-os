@@ -2,10 +2,12 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <fs.h>
-#include <stddev.h>
+#include <std.h>
+#include <serial1.h>
 
-void stddev_putchar(char ch)
+void std_putchar(char ch)
 {
+	serial1_write(ch);
 }
 
 int stdout_write(struct file *f, const void *buf, size_t size)
@@ -13,12 +15,12 @@ int stdout_write(struct file *f, const void *buf, size_t size)
 	char *p = (char *)buf;
 	for (size_t i = 0; i < size; i++)
 	{
-		stddev_putchar(p[i]);
+		std_putchar(p[i]);
 	}
 	return size;
 }
 
-int stddev_init(void)
+int std_init(void)
 {
 	stdin_init();
 	stdout_init();
