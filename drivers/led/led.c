@@ -1,8 +1,10 @@
 #include <led.h>
 
-void led_init(brd_def_led_s* leds, int cnt)
+extern brd_def_led_s leds[LED_CNT];
+
+void led_init(void)
 {
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < LED_CNT; i++)
 	{
 		GPIO_InitTypeDef GPIO_InitStructure = { 0 };
 
@@ -18,36 +20,24 @@ void led_init(brd_def_led_s* leds, int cnt)
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_Init(leds[i].GPIOx, &GPIO_InitStructure);
 
-		GPIO_WriteBit(leds[i].GPIOx, leds[i].GPIO_Pin, 1);
+		led_on(i);
 	}
-}
-
-void led_off(int led)
-{
-	// switch (led)
-	// {
-	// case 0:
-	// 	GPIO_WriteBit(GPIOA, GPIO_Pin_6, 1);
-	// 	break;
-	// case 1:
-	// 	GPIO_WriteBit(GPIOA, GPIO_Pin_7, 1);
-	// 	break;
-	// default:
-	// 	break;
-	// }
 }
 
 void led_on(int led)
 {
-	// switch (led)
-	// {
-	// case 0:
-	// 	GPIO_WriteBit(GPIOA, GPIO_Pin_6, 0);
-	// 	break;
-	// case 1:
-	// 	GPIO_WriteBit(GPIOA, GPIO_Pin_7, 0);
-	// 	break;
-	// default:
-	// 	break;
-	// }
+	leds[led].val = 0;
+	GPIO_WriteBit(leds[led].GPIOx, leds[led].GPIO_Pin, leds[led].val);
+}
+
+void led_off(int led)
+{
+	leds[led].val = 1;
+	GPIO_WriteBit(leds[led].GPIOx, leds[led].GPIO_Pin, leds[led].val);
+}
+
+void led_blink(int led)
+{
+	GPIO_WriteBit(leds[led].GPIOx, leds[led].GPIO_Pin, leds[led].val);
+	leds[led].val = !leds[led].val;
 }

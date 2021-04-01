@@ -7,13 +7,13 @@
 
 #include <led_task.h>
 
-static led_s led[2] = { 0, 0x05, 1, 0xAA };
+static led_s led[LED_CNT] = { 0, 0x05, 1, 0xAA };
 
 void* led_pthread(void *arg)
 {
 	for (uint8_t i = 0;; i++)
 	{
-		for (int j = 0; j < 2; j++)
+		for (int j = 0; j < LED_CNT; j++)
 		{
 			if ((led[j].led_val >> (i % 8)) & 0x1)
 			{
@@ -24,12 +24,12 @@ void* led_pthread(void *arg)
 				led_off(led[j].led_num);
 			}
 		}
-		sleep_ticks(125);
+		sleep_ticks(100);
 	}
 	return NULL;
 }
 
 void led_task(void)
 {
-	pcb_create(PRIO_LED, &led_pthread, NULL, 400);
+	pcb_create(PRIO_LED, &led_pthread, NULL, 500);
 }

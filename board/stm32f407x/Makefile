@@ -19,7 +19,7 @@ READELF		=	arm-none-eabi-readelf
 
 #------------------------------------------------------------------------#
 # Flags
-CFLAGS		+=	-std=gnu11 -g -Os
+CFLAGS		+=	-std=gnu11 -g0 -Os
 
 CFLAGS		+=	-mthumb
 CFLAGS		+=	-Wno-incompatible-pointer-types
@@ -48,7 +48,6 @@ CFLAGS		+=	-I./src/modules
 CFLAGS		+=	-I./src/modules/led
 CFLAGS		+=	-I./src/modules/hmc5883l
 CFLAGS		+=	-I./src/libs
-CFLAGS		+=	-I./src/drv
 CFLAGS		+=	-I./src/dev
 CFLAGS		+=	-I./src/include
 
@@ -59,7 +58,6 @@ CFLAGS		+=	-I$(KERNEL_PATH)/libc
 CFLAGS		+=	-I$(KERNEL_PATH)/math
 CFLAGS		+=	-I$(KERNEL_PATH)/mm
 CFLAGS		+=	-I$(KERNEL_PATH)/fs
-CFLAGS		+=	-I$(KERNEL_PATH)/drv
 
 DRIVERS		=	../../drivers
 CFLAGS		+=	-I$(DRIVERS)/led
@@ -92,10 +90,7 @@ SRC			+=	$(DRIVERS)/led/led.c \
 
 #------------------------------------------------------------------------#
 # Hardware function
-SRC			+=	./src/drv/serial1.c \
-				./src/drv/i2c.c \
-				./src/drv/hmc5883l.c \
-				./src/dev/std.c
+SRC			+=	./src/dev/std.c
 
 #------------------------------------------------------------------------#
 # Libs
@@ -103,8 +98,7 @@ SRC			+=	./src/libs/buff_s.c
 
 #------------------------------------------------------------------------#
 # Modules
-SRC			+=	./src/modules/led/led_task.c \
-				./src/modules/hmc5883l/hmc5883l_task.c
+SRC			+=	./src/modules/led/led_task.c
 
 #------------------------------------------------------------------------#
 # OS Arch

@@ -2,11 +2,11 @@
 #include <fcntl.h>
 #include <fs.h>
 #include <std.h>
-#include <serial1.h>
+// #include <serial1.h>
 
 void std_putchar(char ch)
 {
-	serial1_write(ch);
+	// serial1_write(ch);
 }
 
 int stdout_write(struct file *f, const void *buf, size_t size)
